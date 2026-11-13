@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goal Predict - APP</title>
+<style>
+body{margin:0;font-family:Arial;background:#f2f2f2;padding-bottom:70px}
+.header{background:#00A651;color:white;padding:15px;text-align:center;position:sticky;top:0}
+.header h1{margin:0;font-size:22px}
+.header p{margin:2px;font-size:13px}
+.tabs{display:flex;background:white;position:sticky;top:62px;z-index:10}
+.tabs button{flex:1;padding:12px 2px;border:none;background:white;font-weight:bold;font-size:12px}
+.tabs button.active{background:#00A651;color:white}
+.section{display:none;padding:10px}
+.section.active{display:block}
+.card{background:white;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:0 2px 5px #ccc}
+.card h3{margin:0 0 5px}
+.badge{background:#00A651;color:white;padding:3px 8px;border-radius:10px;font-size:11px}
+.opt{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.opt span{border:1px solid #00A651;padding:6px 10px;border-radius:20px;font-size:12px}
+.opt span.hot{background:#00A651;color:white}
+.h2h{background:#f7f7f7;padding:10px;border-radius:8px;font-size:13px;margin-top:8px}
+.tip{background:#fff3cd;padding:8px;border-radius:8px;font-weight:bold;font-size:13px}
+.mpesa{background:#00A651;color:white;padding:20px;border-radius:12px;text-align:center}
+.mpesa a{display:block;background:white;color:#00A651;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px}
+.bottom{position:fixed;bottom:0;left:0;right:0;display:flex;background:white;border-top:1px solid #ddd}
+.bottom button{flex:1;padding:12px 2px;border:none;background:white;font-size:11px}
+.bottom button.active{color:#00A651;font-weight:bold}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>⚽ GOAL PREDICT</h1>
+<p>Win Daily | Accurate Tips | App Version</p>
+</div>
+
+<div class="tabs">
+<button class="active" onclick="show('home',this)">HOME</button>
+<button onclick="show('today',this)">TODAY</button>
+<button onclick="show('h2h',this)">H2H</button>
+<button onclick="show('past',this)">PAST RESULTS</button>
+<button onclick="show('vip',this)">VIP</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="section active">
+<div class="card"><h3>🔥 Welcome to Goal Predict App</h3><p>Chagua prediction, angalia Head-to-Head, na lipa VIP kupata odds kubwa.</p><p><b>Today: 12 Matches Analysed</b></p></div>
+<div class="card"><h3>⭐ VIP TIP OF THE DAY</h3><p>Man City vs Chelsea - Over 2.5 Goals</p><p>Odd: 1.85 | Confidence: 92%</p></div>
+<div class="card"><h3>📊 Yesterday Results: 10/12 Won ✅</h3><p>Win Rate This Week: 84%</p></div>
+</div>
+
+<!-- TODAY -->
+<div id="today" class="section">
+<h2>Today Matches - 12 Matches</h2>
+
+<div class="card">
+<h3>Man City vs Chelsea</h3><span class="badge">Premier League</span> <span class="badge">6:30 PM</span>
+<p><b>Chagua Prediction:</b></p>
+<div class="opt"><span class="hot">1 - City Win</span><span>X - Draw</span><span>2 - Chelsea Win</span><span class="hot">Over 2.5</span><span>Under 2.5</span><span>BTTS Yes</span><span>Correct Score 2-1</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>City 2-1 Chelsea<br>Chelsea 1-1 City<br>City 3-1 Chelsea<br><b>Record: City 3W, Draw 1, Chelsea 0W</b></div>
+<div class="tip">OUR TIP: Over 2.5 Goals ✅</div>
+</div>
+
+<div class="card">
+<h3>Real Madrid vs Barcelona</h3><span class="badge">La Liga</span> <span class="badge">9:00 PM</span>
+<p><b>Chagua Prediction:</b></p>
+<div class="opt"><span class="hot">1 - Madrid Win</span><span>X - Draw</span><span>2 - Barca Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span><span>Correct Score 3-2</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Madrid 3-2 Barca<br>Barca 2-1 Madrid<br>Madrid 2-0 Barca<br><b>Record: Madrid 2W, Barca 1W</b></div>
+<div class="tip">OUR TIP: Over 2.5 + BTTS ✅</div>
+</div>
+
+<div class="card">
+<h3>Arsenal vs Liverpool</h3><span class="badge">Premier League</span>
+<div class="opt"><span>1 - Arsenal Win</span><span>X - Draw</span><span>2 - Liverpool Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span><span>Correct Score 2-2</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Arsenal 2-2 Liverpool<br>Liverpool 2-0 Arsenal<br>Arsenal 3-1 Liverpool<br><b>Record: 1W Each, 1 Draw</b></div>
+<div class="tip">OUR TIP: Over 1.5 Goals ✅</div>
+</div>
+
+<div class="card">
+<h3>Man United vs Tottenham</h3><span class="badge">Premier League</span>
+<div class="opt"><span>1 - United Win</span><span>X - Draw</span><span>2 - Spurs Win</span><span class="hot">BTTS Yes</span><span>Over 2.5</span><span>Correct Score 2-1</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>United 2-1 Spurs<br>Spurs 2-0 United<br>United 1-1 Spurs<br><b>Record: United 1W, Spurs 1W, Draw 1</b></div>
+<div class="tip">OUR TIP: BTTS Yes ✅</div>
+</div>
+
+<div class="card">
+<h3>Inter Milan vs Juventus</h3><span class="badge">Serie A</span>
+<div class="opt"><span class="hot">1 - Inter Win</span><span>X - Draw</span><span>2 - Juve Win</span><span>Under 3.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Inter 1-0 Juve<br>Juve 1-1 Inter<br>Inter 2-1 Juve<br><b>Record: Inter 2W, Draw 1</b></div>
+<div class="tip">OUR TIP: Inter Win or Draw ✅</div>
+</div>
+
+<div class="card">
+<h3>Bayern Munich vs Dortmund</h3><span class="badge">Bundesliga</span>
+<div class="opt"><span class="hot">1 - Bayern Win</span><span>X - Draw</span><span>2 - Dortmund Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Bayern 4-2 Dortmund<br>Dortmund 2-3 Bayern<br>Bayern 3-1 Dortmund<br><b>Record: Bayern 3W</b></div>
+<div class="tip">OUR TIP: Bayern Win + Over 2.5 ✅</div>
+</div>
+
+<div class="card">
+<h3>PSG vs Marseille</h3><span class="badge">Ligue 1</span>
+<div class="opt"><span class="hot">1 - PSG Win</span><span>X - Draw</span><span>2 - Marseille Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>PSG 2-0 Marseille<br>Marseille 1-2 PSG<br>PSG 3-1 Marseille<br><b>Record: PSG 3W</b></div>
+<div class="tip">OUR TIP: PSG Win ✅</div>
+</div>
+
+<div class="card">
+<h3>AC Milan vs Napoli</h3><span class="badge">Serie A</span>
+<div class="opt"><span>1 - Milan Win</span><span>X - Draw</span><span>2 - Napoli Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Milan 1-1 Napoli<br>Napoli 2-1 Milan<br>Milan 2-0 Napoli<br><b>Record: 1W Each, 1 Draw</b></div>
+<div class="tip">OUR TIP: Over 1.5 ✅</div>
+</div>
+
+<div class="card">
+<h3>Atletico Madrid vs Sevilla</h3><span class="badge">La Liga</span>
+<div class="opt"><span class="hot">1 - Atletico Win</span><span>X - Draw</span><span>2 - Sevilla Win</span><span>Under 3.5</span><span>Under 2.5</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Atletico 1-0 Sevilla<br>Sevilla 1-1 Atletico<br>Atletico 2-0 Sevilla<br><b>Record: Atletico 2W, Draw 1</b></div>
+<div class="tip">OUR TIP: Under 3.5 ✅</div>
+</div>
+
+<div class="card">
+<h3>Ajax vs PSV</h3><span class="badge">Eredivisie</span>
+<div class="opt"><span>1 - Ajax Win</span><span>X - Draw</span><span>2 - PSV Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Ajax 2-3 PSV<br>PSV 2-2 Ajax<br>Ajax 3-2 PSV<br><b>Record: PSV 1W, Ajax 1W, Draw 1</b></div>
+<div class="tip">OUR TIP: Over 2.5 ✅</div>
+</div>
+
+<div class="card">
+<h3>Porto vs Benfica</h3><span class="badge">Primeira Liga</span>
+<div class="opt"><span>1 - Porto Win</span><span>X - Draw</span><span>2 - Benfica Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Porto 1-0 Benfica<br>Benfica 2-1 Porto<br>Porto 1-1 Benfica<br><b>Record: 1W Each, 1 Draw</b></div>
+<div class="tip">OUR TIP: Over 1.5 ✅</div>
+</div>
+
+<div class="card">
+<h3>Galatasaray vs Fenerbahce</h3><span class="badge">Turkey</span>
+<div class="opt"><span>1 - Gala Win</span><span>X - Draw</span><span>2 - Fener Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
+<div class="h2h"><b>Past Meetings:</b><br>Gala 2-1 Fener<br>Fener 1-1 Gala<br>Gala 3-2 Fener<br><b>Record: Gala 2W, Draw 1</b></div>
+<div class="tip">OUR TIP: Over 2.5 ✅</div>
+</div>
+
+</div>
+
+<!-- H2H -->
+<div id="h2h" class="section">
+<h2>Head-to-Head Records</h2>
+<div class="card"><h3>Man City vs Chelsea</h3><p>Last 5: City 3W, Draw 1, Chelsea 1W</p><p>Goals: City 9 - Chelsea 5</p></div>
+<div class="card"><h3>Real Madrid vs Barcelona</h3><p>Last 5: Madrid 3W, Barca 2W</p><p>Goals: Madrid 11 - Barca 9</p></div>
+<div class="card"><h3>Arsenal vs Liverpool</h3><p>Last 5: Arsenal 2W, Liverpool 2W, Draw 1</p></div>
+<div class="card"><h3>Bayern vs Dortmund</h3><p>Last 5: Bayern 4W, Dortmund 1W</p><p>Goals: Bayern 16 - Dortmund 9</p></div>
+</div>
+
+<!-- PAST RESULTS -->
+<div id="past" class="section">
+<h2>Past Results - Yesterday</h2>
+<div class="card"><p>✅ Chelsea 2-1 Brighton - WON Over 1.5</p><p>✅ Real Madrid 3-1 Valencia - WON Over 2.5</p><p>✅ Arsenal 2-0 Brentford - WON</p><p>✅ Man City 3-0 Fulham - WON</p><p>✅ Liverpool 2-1 Everton - WON BTTS</p><p>✅ Bayern 4-1 Stuttgart - WON Over 2.5</p><p>✅ Inter 2-0 Torino - WON</p><p>✅ PSG 3-0 Lyon - WON</p><p>❌ Napoli 1-1 Roma - LOST</p><p>✅ Dortmund 2-1 Leipzig - WON</p></div>
+<div class="card"><h3>Total: 9/10 Won - 90% ✅</h3></div>
+</div>
+
+<!-- VIP -->
+<div id="vip" class="section">
+<div class="mpesa">
+<h2>🔥 VIP MEMBERSHIP</h2>
+<p>Get All VIP Odds Daily - 15+ Odds</p>
+<h1>Ksh 300 / Month</h1>
+<p><b>LIPA NA M-PESA</b></p>
+<p>Send to: <b>0712555279</b></p>
+<p>Name: Langat Kipkorir</p>
+<a href="https://wa.me/254712555279?text=Hi%20I%20have%20paid%20VIP%20300">✅ Nimeshalipa - Click WhatsApp</a>
+<p style="font-size:12px;margin-top:10px">Baada ya kulipa, tuma screenshot hapa</p>
+</div>
+<div class="card"><h3>VIP Benefits</h3><p>✅ 15+ Odds Daily</p><p>✅ Correct Score Tips</p><p>✅ 100% Sure Bet</p><p>✅ WhatsApp Group</p></div>
+</div>
+
+<div class="bottom">
+<button class="active" onclick="show('home',this)">🏠 Home</button>
+<button onclick="show('today',this)">⚽ Today</button>
+<button onclick="show('h2h',this)">📊 H2H</button>
+<button onclick="show('past',this)">📈 Results</button>
+<button onclick="show('vip',this)">👑 VIP</button>
+</div>
+
+<script>
+function show(id,btn){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+if(btn) btn.classList.add('active');
+window.scrollTo(0,0);
+}
+</script>
+
+</body>
+</html>
