@@ -1,19 +1,13 @@
 {
-  "name": "GoalPredict",
-  "short_name": "GoalPredict",
-  "description": "Daily Football Predictions",
-  "start_url": "/Goal-predict/",
+  "name": "Goal Predict",
+  "short_name": "Goal Predict",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#16a34a",
-  "theme_color": "#16a34a",
+  "background_color": "#00A651",
+  "theme_color": "#00A651",
   "icons": [
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/1165/1165187.png",
       "sizes": "512x512",
       "type": "image/png"
     }
