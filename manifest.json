@@ -13,4 +13,19 @@
       "type": "image/png"
     }
   ]
+}{
+  "name": "GoalPredict",
+  "short_name": "GoalPredict",
+  "description": "Daily Football Predictions",
+  "start_url": "/Goal-predict/",
+  "display": "standalone",
+  "background_color": "#16a34a",
+  "theme_color": "#16a34a",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
