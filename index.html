@@ -199,6 +199,22 @@ if(btn) btn.classList.add('active');
 window.scrollTo(0,0);
 }
 </script>
-
+<div id="lockScreen" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#111;color:white;text-align:center;padding-top:100px">
+<h2>🔒 GOAL PREDICT LOCKED</h2>
+<p>Pay KSh 300 to get VIP Code</p>
+<input id="vipCode" placeholder="Enter VIP Code" style="padding:12px;border-radius:10px;border:none;text-align:center;font-size:16px">
+<br><br>
+<button onclick="unlockApp()" style="background:#00A651;color:white;border:none;padding:12px 30px;border-radius:20px;font-weight:bold;font-size:16px">UNLOCK ✅</button>
+<br><br>
+<a href="https://wa.me/254712555279?text=Hi%20I%20want%20VIP%20Code" style="color:#25D366">Pay on WhatsApp</a>
+</div>
+<script>
+function unlockApp(){
+var c=document.getElementById('vipCode').value.trim().toUpperCase();
+if(c==='GOAL300'){localStorage.setItem('vip','yes');document.getElementById('lockScreen').style.display='none';}
+else{alert('Wrong code. Pay KSh 300 on WhatsApp to get code.');}
+}
+if(localStorage.getItem('vip')==='yes'){document.getElementById('lockScreen').style.display='none';}
+</script>
 </body>
 </html>
