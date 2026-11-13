@@ -236,5 +236,41 @@ else{alert('Wrong code. Pay KSh 300 on WhatsApp to get code.');}
 }
 if(localStorage.getItem('vip')==='yes'){document.getElementById('lockScreen').style.display='none';}
 </script>
+<script>
+// AUTO UPDATE - FREE API
+async function autoUpdate(){
+  const today = new Date();
+  const yest = new Date(today); yest.setDate(today.getDate()-1);
+  const tom = new Date(today); tom.setDate(today.getDate()+1);
+  const fmt = d => d.toISOString().split('T')[0];
+  
+  // Auto Date Titles
+  try{
+    // PAST RESULTS
+    let r1 = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${fmt(yest)}&s=Soccer`);
+    let j1 = await r1.json();
+    let pastBox = document.querySelector('#past');
+    if(pastBox && j1.events){
+      let html = `<h3>📅 Past Results</h3><p>Results - ${fmt(yest)}</p>`;
+      j1.events.slice(0,10).forEach(e=>{
+        html += `<p>${e.strHomeTeam} ${e.intHomeScore} - ${e.intAwayScore} ${e.strAwayTeam}</p>`;
+      });
+      pastBox.innerHTML = html;
+    }
+    // TOMORROW
+    let r2 = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${fmt(tom)}&s=Soccer`);
+    let j2 = await r2.json();
+    let tomBox = document.querySelector('#tomorrow');
+    if(tomBox && j2.events){
+      let html2 = `<h3>📅 Tomorrow - ${fmt(tom)}</h3><p>Auto Updated Matches</p>`;
+      j2.events.slice(0,12).forEach(e=>{
+        html2 += `<p>⚽ ${e.strHomeTeam} vs ${e.strAwayTeam} - ${e.strTime} - Over 1.5</p>`;
+      });
+      tomBox.innerHTML = html2;
+    }
+  }catch(e){ console.log("Auto update failed, showing manual"); }
+}
+autoUpdate();
+</script>
 </body>
 </html>
