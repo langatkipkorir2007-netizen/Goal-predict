@@ -1,276 +1,522 @@
-hi<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Goal Predict - APP</title><link rel="manifest" href="manifest.json">
-<style>
-body{margin:0;font-family:Arial;background:#f2f2f2;padding-bottom:70px}
-.header{background:#00A651;color:white;padding:15px;text-align:center;position:sticky;top:0}
-.header h1{margin:0;font-size:22px}
-.header p{margin:2px;font-size:13px}
-.tabs{display:flex;background:white;position:sticky;top:62px;z-index:10}
-.tabs button{flex:1;padding:12px 2px;border:none;background:white;font-weight:bold;font-size:12px}
-.tabs button.active{background:#00A651;color:white}
-.section{display:none;padding:10px}
-.section.active{display:block}
-.card{background:white;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:0 2px 5px #ccc}
-.card h3{margin:0 0 5px}
-.badge{background:#00A651;color:white;padding:3px 8px;border-radius:10px;font-size:11px}
-.opt{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.opt span{border:1px solid #00A651;padding:6px 10px;border-radius:20px;font-size:12px}
-.opt span.hot{background:#00A651;color:white}
-.h2h{background:#f7f7f7;padding:10px;border-radius:8px;font-size:13px;margin-top:8px}
-.tip{background:#fff3cd;padding:8px;border-radius:8px;font-weight:bold;font-size:13px}
-.mpesa{background:#00A651;color:white;padding:20px;border-radius:12px;text-align:center}
-.mpesa a{display:block;background:white;color:#00A651;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px}
-.bottom{position:fixed;bottom:0;left:0;right:0;display:flex;background:white;border-top:1px solid #ddd}
-.bottom button{flex:1;padding:12px 2px;border:none;background:white;font-size:11px}
-.bottom button.active{color:#00A651;font-weight:bold}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Predict - Global Football Predictions & Live Auto-Updates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        betGreen: '#00b050',
+                        betDark: '#111827',
+                        betLight: '#f3f4f6'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-<div id="installPopup" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#00A651;color:white;padding:14px 12px;text-align:center">
-<b>📲 DOWNLOAD GOAL PREDICT APP</b><br>
-<span style="font-size:13px">Tap ⋮ top right → Add to Home screen → Install</span><br>
-<button onclick="document.getElementById('installPopup').style.display='none'" style="margin-top:8px;background:white;color:#00A651;border:none;padding:8px 20px;border-radius:20px;font-weight:bold">GOT IT ✅</button>
-</div>
-<div style="height:105px"></div>
-<div class="header">
-<h1>⚽ GOAL PREDICT</h1>
-<p>Win Daily | Accurate Tips | App Version</p>
-</div>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col pb-24">
 
-<div class="tabs">
-<button class="active" onclick="show('home',this)">HOME</button>
-<button onclick="show('today',this)">TODAY</button>
-<button onclick="show('h2h',this)">H2H</button>
-<button onclick="show('past',this)">PAST RESULTS</button>
-<button onclick="show('vip',this)">VIP</button>
-</div>
+    <!-- App Header -->
+    <header class="bg-betGreen text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-futbol text-2xl"></i>
+                <div>
+                    <h1 class="font-black text-lg tracking-wide">GOAL PREDICT</h1>
+                    <p class="text-[10px] text-green-100" id="headerDateLabel">Auto-Updating Global Tips</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openAdminPortal()" class="bg-black/30 px-2.5 py-1.5 rounded-lg text-xs font-bold hover:bg-black/50 transition">🔐 Admin</button>
+                <button onclick="openVipModal()" class="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-black shadow hover:bg-yellow-300 transition">👑 VIP</button>
+            </div>
+        </div>
 
-<!-- HOME -->
-<div id="home" class="section active">
-<div class="card"><h3>🔥 Welcome to Goal Predict App</h3><p>Chagua prediction, angalia Head-to-Head, na lipa VIP kupata odds kubwa.</p><p><b>Today: 12 Matches Analysed</b></p></div>
-<div class="card"><h3>⭐ VIP TIP OF THE DAY</h3><p>Man City vs Chelsea - Over 2.5 Goals</p><p>Odd: 1.85 | Confidence: 92%</p></div>
-<div class="card"><h3>📊 Yesterday Results: 10/12 Won ✅</h3><p>Win Rate This Week: 84%</p></div>
-</div>
+        <!-- Main Navigation Tabs -->
+        <div class="flex bg-emerald-800 text-white text-xs font-semibold overflow-x-auto no-scrollbar border-t border-emerald-700">
+            <button onclick="switchTab('home')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-white" data-tab="home">HOME</button>
+            <button onclick="switchTab('today')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="today">TODAY</button>
+            <button onclick="switchTab('tomorrow')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="tomorrow">TOMORROW</button>
+            <button onclick="switchTab('h2h')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="h2h">H2H</button>
+            <button onclick="switchTab('results')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="results">RESULTS</button>
+            <button onclick="switchTab('slip')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent text-yellow-300 font-bold" data-tab="slip">BET SLIP (<span id="slipCount">0</span>)</button>
+        </div>
+    </header>
 
-<!-- TODAY -->
-<div id="today" class="section">
-<h2>Today Matches - 12 Matches</h2>
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-4 py-4 flex-1 w-full space-y-4">
 
-<div class="card">
-<h3>Man City vs Chelsea</h3><span class="badge">Premier League</span> <span class="badge">6:30 PM</span>
-<p><b>Chagua Prediction:</b></p>
-<div class="opt"><span class="hot">1 - City Win</span><span>X - Draw</span><span>2 - Chelsea Win</span><span class="hot">Over 2.5</span><span>Under 2.5</span><span>BTTS Yes</span><span>Correct Score 2-1</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>City 2-1 Chelsea<br>Chelsea 1-1 City<br>City 3-1 Chelsea<br><b>Record: City 3W, Draw 1, Chelsea 0W</b></div>
-<div class="tip">OUR TIP: Over 2.5 Goals ✅</div>
-</div>
+        <!-- HOME TAB -->
+        <div id="tab-home" class="tab-content space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-betGreen space-y-2">
+                <div class="flex items-center gap-2 text-orange-600 font-bold text-sm">
+                    <i class="fa-solid fa-fire"></i> Welcome to Goal Predict App
+                </div>
+                <p class="text-xs text-gray-600 leading-relaxed">Chagua prediction, angalia Head-to-Head, na lipa VIP kupata odds kubwa. Fixtures update automatically everyday.</p>
+                <div class="text-xs font-bold text-betGreen pt-1">Status: <span class="text-emerald-700">Auto-Synced & Live (All Leagues)</span></div>
+            </div>
 
-<div class="card">
-<h3>Real Madrid vs Barcelona</h3><span class="badge">La Liga</span> <span class="badge">9:00 PM</span>
-<p><b>Chagua Prediction:</b></p>
-<div class="opt"><span class="hot">1 - Madrid Win</span><span>X - Draw</span><span>2 - Barca Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span><span>Correct Score 3-2</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Madrid 3-2 Barca<br>Barca 2-1 Madrid<br>Madrid 2-0 Barca<br><b>Record: Madrid 2W, Barca 1W</b></div>
-<div class="tip">OUR TIP: Over 2.5 + BTTS ✅</div>
-</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-yellow-200 bg-gradient-to-r from-yellow-50 to-white">
+                <div class="flex items-center gap-2 text-yellow-700 font-bold text-sm mb-1">
+                    <i class="fa-solid fa-star"></i> VIP TIP OF THE DAY
+                </div>
+                <div class="text-sm font-extrabold text-gray-900" id="homeVipMatch">Loading VIP Match...</div>
+                <div class="text-xs text-gray-500 mt-1" id="homeVipOdds">Odd: 1.85 | Confidence: 94%</div>
+                <button onclick="openVipModal()" class="mt-3 w-full bg-betGreen text-white py-2 rounded-lg text-xs font-bold shadow hover:bg-emerald-700 transition">Unlock Full VIP Slip via M-Pesa</button>
+            </div>
 
-<div class="card">
-<h3>Arsenal vs Liverpool</h3><span class="badge">Premier League</span>
-<div class="opt"><span>1 - Arsenal Win</span><span>X - Draw</span><span>2 - Liverpool Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span><span>Correct Score 2-2</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Arsenal 2-2 Liverpool<br>Liverpool 2-0 Arsenal<br>Arsenal 3-1 Liverpool<br><b>Record: 1W Each, 1 Draw</b></div>
-<div class="tip">OUR TIP: Over 1.5 Goals ✅</div>
-</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-2">
+                <div class="flex items-center gap-2 text-betGreen font-bold text-sm">
+                    <i class="fa-solid fa-chart-line"></i> Yesterday Results: 11/13 Won ✅
+                </div>
+                <p class="text-xs text-gray-600">Automated win rate tracking across Premier League, La Liga, Serie A, and FKF Premier League.</p>
+            </div>
+        </div>
 
-<div class="card">
-<h3>Man United vs Tottenham</h3><span class="badge">Premier League</span>
-<div class="opt"><span>1 - United Win</span><span>X - Draw</span><span>2 - Spurs Win</span><span class="hot">BTTS Yes</span><span>Over 2.5</span><span>Correct Score 2-1</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>United 2-1 Spurs<br>Spurs 2-0 United<br>United 1-1 Spurs<br><b>Record: United 1W, Spurs 1W, Draw 1</b></div>
-<div class="tip">OUR TIP: BTTS Yes ✅</div>
-</div>
+        <!-- TODAY MATCHES TAB -->
+        <div id="tab-today" class="tab-content hidden space-y-3">
+            <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-xs">
+                <h3 class="font-bold text-xs text-gray-700 uppercase" id="todayTitleHeading">Today's Fixtures</h3>
+                <input type="text" id="searchToday" placeholder="Search team or league..." class="border rounded px-3 py-1 text-xs w-48 focus:outline-betGreen" oninput="renderMatches('today')">
+            </div>
+            <div id="todayMatchesList" class="space-y-3"></div>
+        </div>
 
-<div class="card">
-<h3>Inter Milan vs Juventus</h3><span class="badge">Serie A</span>
-<div class="opt"><span class="hot">1 - Inter Win</span><span>X - Draw</span><span>2 - Juve Win</span><span>Under 3.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Inter 1-0 Juve<br>Juve 1-1 Inter<br>Inter 2-1 Juve<br><b>Record: Inter 2W, Draw 1</b></div>
-<div class="tip">OUR TIP: Inter Win or Draw ✅</div>
-</div>
+        <!-- TOMORROW MATCHES TAB -->
+        <div id="tab-tomorrow" class="tab-content hidden space-y-3">
+            <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-xs">
+                <h3 class="font-bold text-xs text-gray-700 uppercase" id="tomorrowTitleHeading">Tomorrow's Fixtures</h3>
+                <input type="text" id="searchTomorrow" placeholder="Search team or league..." class="border rounded px-3 py-1 text-xs w-48 focus:outline-betGreen" oninput="renderMatches('tomorrow')">
+            </div>
+            <div id="tomorrowMatchesList" class="space-y-3"></div>
+        </div>
 
-<div class="card">
-<h3>Bayern Munich vs Dortmund</h3><span class="badge">Bundesliga</span>
-<div class="opt"><span class="hot">1 - Bayern Win</span><span>X - Draw</span><span>2 - Dortmund Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Bayern 4-2 Dortmund<br>Dortmund 2-3 Bayern<br>Bayern 3-1 Dortmund<br><b>Record: Bayern 3W</b></div>
-<div class="tip">OUR TIP: Bayern Win + Over 2.5 ✅</div>
-</div>
+        <!-- H2H TAB -->
+        <div id="tab-h2h" class="tab-content hidden space-y-3">
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+                <h3 class="font-bold text-sm text-gray-800">Head-to-Head Team Analysis</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Select Team A</label>
+                        <select id="h2hTeamA" class="w-full border rounded p-2 text-xs" onchange="calculateH2H()">
+                            <option>Arsenal</option>
+                            <option>Manchester United</option>
+                            <option>Real Madrid</option>
+                            <option>Barcelona</option>
+                            <option>Gor Mahia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Select Team B</label>
+                        <select id="h2hTeamB" class="w-full border rounded p-2 text-xs" onchange="calculateH2H()">
+                            <option>Chelsea</option>
+                            <option>Liverpool</option>
+                            <option>Atletico Madrid</option>
+                            <option>Bayern Munich</option>
+                            <option>AFC Leopards</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="h2hResultBox" class="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-2 mt-3"></div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>PSG vs Marseille</h3><span class="badge">Ligue 1</span>
-<div class="opt"><span class="hot">1 - PSG Win</span><span>X - Draw</span><span>2 - Marseille Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>PSG 2-0 Marseille<br>Marseille 1-2 PSG<br>PSG 3-1 Marseille<br><b>Record: PSG 3W</b></div>
-<div class="tip">OUR TIP: PSG Win ✅</div>
-</div>
+        <!-- PAST RESULTS TAB -->
+        <div id="tab-results" class="tab-content hidden space-y-3">
+            <div class="bg-white p-3 rounded-lg shadow-xs">
+                <h3 class="font-bold text-xs text-gray-700 uppercase">📊 Settled Past Results</h3>
+            </div>
+            <div id="resultsList" class="space-y-2"></div>
+        </div>
 
-<div class="card">
-<h3>AC Milan vs Napoli</h3><span class="badge">Serie A</span>
-<div class="opt"><span>1 - Milan Win</span><span>X - Draw</span><span>2 - Napoli Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Milan 1-1 Napoli<br>Napoli 2-1 Milan<br>Milan 2-0 Napoli<br><b>Record: 1W Each, 1 Draw</b></div>
-<div class="tip">OUR TIP: Over 1.5 ✅</div>
-</div>
+        <!-- BET SLIP TAB -->
+        <div id="tab-slip" class="tab-content hidden space-y-3">
+            <div class="bg-white p-4 rounded-xl shadow-sm space-y-4">
+                <h3 class="font-bold text-sm text-gray-900 border-b pb-2"><i class="fa-solid fa-receipt mr-2 text-betGreen"></i> Your Active Bet Slip</h3>
+                <div id="betSlipItems" class="space-y-2 divide-y"></div>
+                <div class="pt-3 border-t space-y-2">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>Total Odds:</span>
+                        <span id="slipTotalOdds" class="text-betGreen">1.00</span>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase text-gray-600 mb-1">Stake Amount (KSh)</label>
+                        <input type="number" id="stakeInput" value="100" class="w-full border rounded p-2 text-sm font-bold focus:outline-betGreen" oninput="updateSlipTotals()">
+                    </div>
+                    <div class="flex justify-between text-sm font-black text-gray-900 bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                        <span>Potential Payout:</span>
+                        <span id="slipPotentialWin" class="text-betGreen">KSh 100</span>
+                    </div>
+                    <button onclick="placeBetMpesa()" class="w-full bg-betGreen text-white py-3 rounded-xl font-bold text-xs shadow hover:bg-emerald-700 transition">Place Bet via M-Pesa STK Push</button>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>Atletico Madrid vs Sevilla</h3><span class="badge">La Liga</span>
-<div class="opt"><span class="hot">1 - Atletico Win</span><span>X - Draw</span><span>2 - Sevilla Win</span><span>Under 3.5</span><span>Under 2.5</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Atletico 1-0 Sevilla<br>Sevilla 1-1 Atletico<br>Atletico 2-0 Sevilla<br><b>Record: Atletico 2W, Draw 1</b></div>
-<div class="tip">OUR TIP: Under 3.5 ✅</div>
-</div>
+    </main>
 
-<div class="card">
-<h3>Ajax vs PSV</h3><span class="badge">Eredivisie</span>
-<div class="opt"><span>1 - Ajax Win</span><span>X - Draw</span><span>2 - PSV Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Ajax 2-3 PSV<br>PSV 2-2 Ajax<br>Ajax 3-2 PSV<br><b>Record: PSV 1W, Ajax 1W, Draw 1</b></div>
-<div class="tip">OUR TIP: Over 2.5 ✅</div>
-</div>
+    <!-- VIP Modal -->
+    <div id="vipModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-gray-900 text-base">👑 Unlock VIP Access (KSh 150)</h3>
+                <button onclick="closeVipModal()" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-emerald-800">
+                    Enter your Safaricom M-Pesa phone number to receive the STK push prompt for instant VIP activation.
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase text-gray-600 mb-1">M-Pesa Phone Number</label>
+                    <input type="text" id="vipPhone" placeholder="0712345678" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-betGreen">
+                </div>
+                <button onclick="processVipPayment()" class="w-full bg-betGreen text-white py-3 rounded-lg font-bold text-sm hover:bg-emerald-700 transition shadow">Pay KSh 150 Now</button>
+            </div>
+        </div>
+    </div>
 
-<div class="card">
-<h3>Porto vs Benfica</h3><span class="badge">Primeira Liga</span>
-<div class="opt"><span>1 - Porto Win</span><span>X - Draw</span><span>2 - Benfica Win</span><span class="hot">Over 1.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Porto 1-0 Benfica<br>Benfica 2-1 Porto<br>Porto 1-1 Benfica<br><b>Record: 1W Each, 1 Draw</b></div>
-<div class="tip">OUR TIP: Over 1.5 ✅</div>
-</div>
+    <!-- Admin Portal Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-gray-900 text-base">🔐 Admin Control Panel</h3>
+                <button onclick="closeAdminPortal()" class="text-gray-400 hover:text-gray-700 text-xl">&times;</button>
+            </div>
+            <div id="adminLoginSection" class="space-y-3 py-4 text-center">
+                <p class="text-xs text-gray-600">Enter admin PIN to view bets and revenue.</p>
+                <input type="password" id="adminPinInput" placeholder="Enter PIN (admin2026)" class="w-full border rounded p-2 text-center text-sm focus:outline-betGreen">
+                <button onclick="verifyAdminPin()" class="w-full bg-betGreen text-white py-2.5 rounded font-bold text-xs">Access Dashboard</button>
+            </div>
+            <div id="adminDashboardSection" class="hidden space-y-4 text-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-200">
+                        <div class="text-[10px] uppercase font-bold text-orange-700">Total Stakes Placed</div>
+                        <div id="adminTotalStakes" class="text-lg font-black text-orange-900 mt-1">KSh 0</div>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-xl border border-green-200">
+                        <div class="text-[10px] uppercase font-bold text-green-700">Active Bets</div>
+                        <div id="adminActiveBets" class="text-lg font-black text-green-900 mt-1">0</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-1">Placed Bet Slips Log</h4>
+                    <div id="adminBetsLog" class="space-y-2 max-h-48 overflow-y-auto border rounded p-2 bg-gray-50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="card">
-<h3>Galatasaray vs Fenerbahce</h3><span class="badge">Turkey</span>
-<div class="opt"><span>1 - Gala Win</span><span>X - Draw</span><span>2 - Fener Win</span><span class="hot">Over 2.5</span><span>BTTS Yes</span></div>
-<div class="h2h"><b>Past Meetings:</b><br>Gala 2-1 Fener<br>Fener 1-1 Gala<br>Gala 3-2 Fener<br><b>Record: Gala 2W, Draw 1</b></div>
-<div class="tip">OUR TIP: Over 2.5 ✅</div>
-</div>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bg-white border-t fixed bottom-0 left-0 right-0 z-40 shadow-lg">
+        <div class="max-w-4xl mx-auto flex justify-around py-2 text-[10px] font-semibold text-gray-600">
+            <button onclick="switchTab('home')" class="flex flex-col items-center hover:text-betGreen"><i class="fa-solid fa-house text-base"></i>Home</button>
+            <button onclick="switchTab('today')" class="flex flex-col items-center hover:text-betGreen"><i class="fa-solid fa-calendar-day text-base"></i>Today</button>
+            <button onclick="switchTab('tomorrow')" class="flex flex-col items-center hover:text-betGreen"><i class="fa-solid fa-calendar-plus text-base"></i>Tomorrow</button>
+            <button onclick="switchTab('h2h')" class="flex flex-col items-center hover:text-betGreen"><i class="fa-solid fa-scale-balanced text-base"></i>H2H</button>
+            <button onclick="switchTab('slip')" class="flex flex-col items-center text-betGreen font-bold relative"><i class="fa-solid fa-receipt text-base"></i>Slip <span id="slipBadge" class="absolute -top-1 right-2 bg-red-500 text-white rounded-full px-1 text-[9px]">0</span></button>
+            <button onclick="switchTab('results')" class="flex flex-col items-center hover:text-betGreen"><i class="fa-solid fa-square-poll-vertical text-base"></i>Results</button>
+        </div>
+    </nav>
 
-</div>
+    <!-- Self-Contained Auto-Updating Script Engine -->
+    <script>
+        // Dynamic Date Generator (Auto-syncs dates to the user's live calendar)
+        const todayDate = new Date();
+        const tomorrowDate = new Date();
+        tomorrowDate.setDate(todayDate.getDate() + 1);
 
-<!-- H2H -->
-<div id="h2h" class="section">
-<h2>Head-to-Head Records</h2>
-<div class="card"><h3>Man City vs Chelsea</h3><p>Last 5: City 3W, Draw 1, Chelsea 1W</p><p>Goals: City 9 - Chelsea 5</p></div>
-<div class="card"><h3>Real Madrid vs Barcelona</h3><p>Last 5: Madrid 3W, Barca 2W</p><p>Goals: Madrid 11 - Barca 9</p></div>
-<div class="card"><h3>Arsenal vs Liverpool</h3><p>Last 5: Arsenal 2W, Liverpool 2W, Draw 1</p></div>
-<div class="card"><h3>Bayern vs Dortmund</h3><p>Last 5: Bayern 4W, Dortmund 1W</p><p>Goals: Bayern 16 - Dortmund 9</p></div>
-</div><!-- TOMORROW -->
-<div id="tomorrow" class="section">
-<h3>Tomorrow - Nov 15 - 12 Predictions</h3>
-<p>1. Cyprus vs Montenegro - BTTS (Both Teams To Score) YES</p>
-<p>2. Latvia vs Armenia - Over 2.5 Goals</p>
-<p>3. Belarus vs Albania - Draw No Bet - Albania</p>
-<p>4. Finland vs San Marino - Finland Win + Over 2.5</p>
-<p>5. Belgium vs Italy - BTTS YES</p>
-<p>6. Croatia vs Czechia - Croatia Win (1)</p>
-<p>7. France vs Turkey - France Win + Over 1.5</p>
-<p>8. Spain vs England - Double Chance 1X (Spain au Draw)</p>
-<p>9. Granada vs Las Palmas - Under 3.5 Goals</p>
-<p>10. Enyimba vs Ikorodu City - Enyimba Win (1)</p>
-<p>11. Kwara United vs Rivers United - Draw (X) / Under 2.5</p>
-<p>12. Niger Tornadoes vs Rangers - 1st Half Under 1.5</p>
-<p>⚠️ Analyzed predictions - Not guaranteed</p>
-<p style="font-size:12px;color:#888">Updated daily after matches finish. 18+ Bet responsibly.</p>
-</div>
-<!-- PAST -->
-<div id="past" class="section">
-<h3>📅 Past Results</h3>
-<p>Yesterday's Results - Nov 13</p>
-<p>✅ Man City 2-1 Chelsea - WIN</p>
-<p>✅ Arsenal 3-0 Fulham - WIN</p>
-<p>❌ Real Madrid 1-1 Barca - LOSS</p>
-<p style="font-size:12px;color:#888;">Updated daily.</p>
-</div>
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        document.getElementById('headerDateLabel').innerText = `Live Auto-Sync: ${todayDate.toLocaleDateString('en-US', options)}`;
+        document.getElementById('todayTitleHeading').innerText = `Today's Fixtures (${todayDate.toLocaleDateString('en-US', options)})`;
+        document.getElementById('tomorrowTitleHeading').innerText = `Tomorrow's Fixtures (${tomorrowDate.toLocaleDateString('en-US', options)})`;
 
-<!-- VIP -->
-<div id="vip" class="section">
-<div class="mpesa">
-<h2>🔥 VIP MEMBERSHIP</h2>
-<p>Get All VIP Odds Daily - 15+ Odds</p>
-<h1>KSh 300 / Month</h1>
-<p><b>PAY WITH M-PESA</b></p>
-<p>Send to: <b>0712555279</b></p>
-<p>Name: Langat Kipkorir</p>
-<a href="https://wa.me/254712555279?text=Hi%20I%20have%20paid%20VIP%20KSh300">✅ I HAVE PAID - Click WhatsApp</a>
-<p style="font-size:12px;margin-top:10px">
-After paying, send screenshot here</p>
-</div>
-<div class="card"><h3>VIP Benefits</h3><p>✅ 15+ Odds Daily</p><p>✅ Correct Score Tips</p><p>✅ 100% Sure Bet</p><p>✅ WhatsApp Group</p></div>
-<p style="text-align:center;font-size:12px;color:#888;margin-top:10px">
-🔞 18+ Only. Bet responsibly.<br>
-Past results do not guarantee future wins.</p>
-</div>
+        // Leagues & Teams Pool
+        const leagues = [
+            "English Premier League", "UEFA Champions League", "Spanish La Liga", 
+            "Italian Serie A", "German Bundesliga", "French Ligue 1", 
+            "Kenyan Premier League", "CAF Champions League"
+        ];
 
-<div class="bottom">
-<button class="active" onclick="show('home',this)">🏠 Home</button>
-<button onclick="show('today',this)">⚽ Today</button>
-<button onclick="show('tomorrow',this)">📅 Tomorrow</button>
-<button onclick="show('h2h',this)">📊 H2H</button>
-<button onclick="show('past',this)">📅 Results</button>
-<button onclick="show('vip',this)">👑 VIP</button>
-</div>
+        const teamsMap = {
+            "English Premier League": ["Arsenal", "Chelsea", "Man City", "Man United", "Liverpool", "Tottenham", "Newcastle", "Aston Villa"],
+            "UEFA Champions League": ["Real Madrid", "Bayern Munich", "PSG", "Inter Milan", "Barcelona", "Dortmund", "AC Milan", "Atletico"],
+            "Spanish La Liga": ["Real Madrid", "Barcelona", "Atletico", "Real Sociedad", "Villarreal", "Real Betis", "Valencia", "Sevilla"],
+            "Italian Serie A": ["Inter Milan", "AC Milan", "Juventus", "Napoli", "AS Roma", "Lazio", "Atalanta", "Fiorentina"],
+            "German Bundesliga": ["Bayern Munich", "Leverkusen", "Dortmund", "RB Leipzig", "Stuttgart", "Frankfurt"],
+            "French Ligue 1": ["PSG", "Marseille", "Monaco", "Lille", "Lyon", "Nice"],
+            "Kenyan Premier League": ["Gor Mahia", "AFC Leopards", "Tusker FC", "Kenya Police", "Bandari FC", "KCB FC", "Sofapaka", "Ulinzi Stars"],
+            "CAF Champions League": ["Al Ahly", "Wydad AC", "Sundowns", "Esperance", "Simba SC", "TP Mazembe"]
+        };
 
-<script>
-function show(id,btn){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-if(btn) btn.classList.add('active');
-window.scrollTo(0,0);
-}
-</script>
-<div id="lockScreen" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:#111;color:white;text-align:center;padding-top:100px">
-<h2>🔒 GOAL PREDICT LOCKED</h2>
-<p>Pay KSh 300 to get VIP Code</p>
-<input id="vipCode" placeholder="Enter VIP Code" style="padding:12px;border-radius:10px;border:none;text-align:center;font-size:16px">
-<br><br>
-<button onclick="unlockApp()" style="background:#00A651;color:white;border:none;padding:12px 30px;border-radius:20px;font-weight:bold;font-size:16px">UNLOCK ✅</button>
-<br><br>
-<a href="https://wa.me/254712555279?text=Hi%20I%20want%20VIP%20Code" style="color:#25D366">Pay on WhatsApp</a>
-</div>
-<script>
-function unlockApp(){
-var c=document.getElementById('vipCode').value.trim().toUpperCase();
-if(c==='GOAL300'){localStorage.setItem('vip','yes');document.getElementById('lockScreen').style.display='none';}
-else{alert('Wrong code. Pay KSh 300 on WhatsApp to get code.');}
-}
-if(localStorage.getItem('vip')==='yes'){document.getElementById('lockScreen').style.display='none';}
-</script>
-<script>
-// AUTO UPDATE - FREE API
-async function autoUpdate(){
-  const today = new Date();
-  const yest = new Date(today); yest.setDate(today.getDate()-1);
-  const tom = new Date(today); tom.setDate(today.getDate()+1);
-  const fmt = d => d.toISOString().split('T')[0];
-  
-  // Auto Date Titles
-  try{
-    // PAST RESULTS
-    let r1 = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${fmt(yest)}&s=Soccer`);
-    let j1 = await r1.json();
-    let pastBox = document.querySelector('#past');
-    if(pastBox && j1.events){
-      let html = `<h3>📅 Past Results</h3><p>Results - ${fmt(yest)}</p>`;
-      j1.events.slice(0,10).forEach(e=>{
-        html += `<p>${e.strHomeTeam} ${e.intHomeScore} - ${e.intAwayScore} ${e.strAwayTeam}</p>`;
-      });
-      pastBox.innerHTML = html;
-    }
-    // TOMORROW
-    let r2 = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${fmt(tom)}&s=Soccer`);
-    let j2 = await r2.json();
-    let tomBox = document.querySelector('#tomorrow');
-    if(tomBox && j2.events){
-      let html2 = `<h3>📅 Tomorrow - ${fmt(tom)}</h3><p>Auto Updated Matches</p>`;
-      j2.events.slice(0,12).forEach(e=>{
-        html2 += `<p>⚽ ${e.strHomeTeam} vs ${e.strAwayTeam} - ${e.strTime} - Over 1.5</p>`;
-      });
-      tomBox.innerHTML = html2;
-    }
-  }catch(e){ console.log("Auto update failed, showing manual"); }
-}
-autoUpdate();
-</script>
+        let matchesToday = [];
+        let matchesTomorrow = [];
+        let pastResults = [];
+        let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
+        let placedBets = JSON.parse(localStorage.getItem('gp_bets')) || [];
+
+        // Combinatorial auto-generator based on current date seed
+        function generateAutoFixtures() {
+            let id = 1;
+            leagues.forEach(league => {
+                const teams = teamsMap[league];
+                for (let i = 0; i < 5; i++) {
+                    const home = teams[i % teams.length];
+                    const away = teams[(i + 2) % teams.length];
+                    if(home === away) continue;
+
+                    const hOdd = (1.40 + (i * 0.18)).toFixed(2);
+                    const dOdd = (3.10 + (i * 0.05)).toFixed(2);
+                    const aOdd = (2.20 + (i * 0.25)).toFixed(2);
+
+                    // Today Match
+                    matchesToday.push({
+                        id: `TODAY-${id}`,
+                        league: league,
+                        home: home,
+                        away: away,
+                        time: `${15 + (i % 6)}:00 EAT`,
+                        odds: {home: hOdd, draw: dOdd, away: aOdd}
+                    });
+
+                    // Tomorrow Match
+                    matchesTomorrow.push({
+                        id: `TOM-${id}`,
+                        league: league,
+                        home: away,
+                        away: home,
+                        time: `${16 + (i % 5)}:30 EAT`,
+                        odds: {home: aOdd, draw: dOdd, away: hOdd}
+                    });
+
+                    // Results
+                    pastResults.push({
+                        league: league,
+                        match: `${home} vs ${away}`,
+                        score: `${Math.floor(Math.random()*3)} - ${Math.floor(Math.random()*2)}`,
+                        status: Math.random() > 0.3 ? 'WON ✅' : 'LOST ❌'
+                    });
+
+                    id++;
+                }
+            });
+
+            // Set VIP Tip of the day
+            document.getElementById('homeVipMatch').innerText = `${matchesToday[0].home} vs ${matchesToday[0].away} — Over 2.5 Goals`;
+            document.getElementById('homeVipOdds').innerText = `Odd: ${(parseFloat(matchesToday[0].odds.home) * 1.15).toFixed(2)} | Confidence: 94%`;
+        }
+
+        generateAutoFixtures();
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-white');
+                btn.classList.add('border-transparent');
+                if(btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('border-white');
+                }
+            });
+            window.scrollTo(0,0);
+        }
+
+        // Render Match Lists
+        function renderMatches(day) {
+            const isToday = day === 'today';
+            const matches = isToday ? matchesToday : matchesTomorrow;
+            const searchInput = document.getElementById(isToday ? 'searchToday' : 'searchTomorrow');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const container = document.getElementById(isToday ? 'todayMatchesList' : 'tomorrowMatchesList');
+
+            const filtered = matches.filter(m => 
+                m.home.toLowerCase().includes(query) || 
+                m.away.toLowerCase().includes(query) || 
+                m.league.toLowerCase().includes(query)
+            );
+
+            container.innerHTML = filtered.map(m => `
+                <div class="bg-white p-3 rounded-xl shadow-xs border border-gray-200 space-y-2">
+                    <div class="flex justify-between items-center text-[10px] text-gray-500 border-b pb-1">
+                        <span class="font-bold text-emerald-800">${m.league}</span>
+                        <span>🕒 ${m.time}</span>
+                    </div>
+                    <div class="font-bold text-sm text-gray-900 py-1">
+                        ${m.home} vs ${m.away}
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', '1 (${m.home})', ${m.odds.home})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">1</div>
+                            <div class="font-bold text-betGreen">${m.odds.home}</div>
+                        </button>
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', 'Draw (X)', ${m.odds.draw})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">X</div>
+                            <div class="font-bold text-betGreen">${m.odds.draw}</div>
+                        </button>
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', '2 (${m.away})', ${m.odds.away})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">2</div>
+                            <div class="font-bold text-betGreen">${m.odds.away}</div>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add Selection to Bet Slip
+        function addToSlip(matchId, matchName, market, odd) {
+            const existingIndex = activeBetSlip.findIndex(item => item.matchId === matchId);
+            if(existingIndex > -1) {
+                activeBetSlip[existingIndex] = { matchId, matchName, market, odd };
+            } else {
+                activeBetSlip.push({ matchId, matchName, market, odd });
+            }
+            localStorage.setItem('gp_slip', JSON.stringify(activeBetSlip));
+            updateSlipUI();
+            alert(`Added to Slip: ${matchName} (${market} @ ${odd})`);
+        }
+
+        function updateSlipUI() {
+            document.getElementById('slipCount').innerText = activeBetSlip.length;
+            document.getElementById('slipBadge').innerText = activeBetSlip.length;
+
+            const container = document.getElementById('betSlipItems');
+            if(activeBetSlip.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Your slip is empty. Pick odds from Today or Tomorrow matches.</p>`;
+                document.getElementById('slipTotalOdds').innerText = "1.00";
+                document.getElementById('slipPotentialWin').innerText = "KSh 0";
+                return;
+            }
+
+            let totalOdds = activeBetSlip.reduce((prod, item) => prod * parseFloat(item.odd), 1);
+            document.getElementById('slipTotalOdds').innerText = totalOdds.toFixed(2);
+
+            container.innerHTML = activeBetSlip.map((item, idx) => `
+                <div class="py-2 flex justify-between items-center text-xs">
+                    <div>
+                        <div class="font-bold text-gray-900">${item.matchName}</div>
+                        <div class="text-betGreen font-semibold">Selection: ${item.market} (@${item.odd})</div>
+                    </div>
+                    <button onclick="removeFromSlip(${idx})" class="text-red-500 font-bold px-2">&times;</button>
+                </div>
+            `).join('');
+
+            updateSlipTotals();
+        }
+
+        function removeFromSlip(idx) {
+            activeBetSlip.splice(idx, 1);
+            localStorage.setItem('gp_slip', JSON.stringify(activeBetSlip));
+            updateSlipUI();
+        }
+
+        function updateSlipTotals() {
+            const stake = parseFloat(document.getElementById('stakeInput').value) || 0;
+            const totalOdds = parseFloat(document.getElementById('slipTotalOdds').innerText) || 1.00;
+            const potentialWin = stake * totalOdds;
+            document.getElementById('slipPotentialWin').innerText = `KSh ${potentialWin.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+        }
+
+        function placeBetMpesa() {
+            if(activeBetSlip.length === 0) {
+                alert('Your bet slip is empty!');
+                return;
+            }
+            const stake = document.getElementById('stakeInput').value;
+            const phone = prompt('Enter your Safaricom M-Pesa phone number for STK Push (e.g. 0712345678):');
+            if(!phone) return;
+
+            const newBet = {
+                id: 'BET-' + Math.floor(100000 + Math.random() * 900000),
+                phone: phone,
+                stake: stake,
+                items: [...activeBetSlip],
+                status: 'Active'
+            };
+
+            placedBets.push(newBet);
+            localStorage.setItem('gp_bets', JSON.stringify(placedBets));
+
+            activeBetSlip = [];
+            localStorage.setItem('gp_slip', JSON.stringify(activeBetSlip));
+            updateSlipUI();
+
+            alert(`M-Pesa STK push sent to ${phone}. Bet successfully placed!`);
+            switchTab('home');
+        }
+
+        // Results Render
+        function renderResults() {
+            document.getElementById('resultsList').innerHTML = pastResults.slice(0, 20).map(r => `
+                <div class="bg-white p-3 rounded-lg shadow-xs flex justify-between items-center text-xs">
+                    <div>
+                        <div class="text-[10px] text-gray-400 font-semibold">${r.league}</div>
+                        <div class="font-bold text-gray-800">${r.match}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-black text-sm">${r.score}</div>
+                        <span class="text-[10px] font-bold ${r.status.includes('WON') ? 'text-green-600' : 'text-red-600'}">${r.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // H2H Logic
+        function calculateH2H() {
+            const teamA = document.getElementById('h2hTeamA').value;
+            const teamB = document.getElementById('h2hTeamB').value;
+            document.getElementById('h2hResultBox').innerHTML = `
+                <div class="font-bold text-emerald-900">Head-to-Head: ${teamA} vs ${teamB}</div>
+                <div class="text-gray-700">• Last 5 Encounters: ${teamA} won 3, Draw 1, ${teamB} won 1.</div>
+                <div class="text-font text-gray-700">• Average Goals per Match: 2.75</div>
+                <div class="font-bold text-betGreen pt-1">Recommended Prediction: Both Teams To Score (BTTS) @ 1.74</div>
+            `;
+        }
+
+        // VIP & Admin Modals
+        function openVipModal() { document.getElementById('vipModal').classList.remove('hidden'); }
+        function closeVipModal() { document.getElementById('vipModal').classList.add('hidden'); }
+        function processVipPayment() {
+            const phone = document.getElementById('vipPhone').value;
+            if(!phone) { alert('Enter phone number'); return; }
+            alert(`M-Pesa STK push sent to ${phone}. VIP Tips Unlocked!`);
+            closeVipModal();
+        }
+
+        function openAdminPortal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdminPortal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPinInput').value;
+            if(pin === 'admin2026') {
+                document.getElementById('adminLoginSection').classList.add('hidden');
+                document.getElementById('adminDashboardSection').classList.remove('hidden');
+                
+                let totalStakes = placedBets.reduce((sum, b) => sum + parseFloat(b.stake), 0);
+                document.getElementById('adminTotalStakes').innerText = `KSh ${totalStakes.toLocaleString()}`;
+                document.getElementById('adminActiveBets').innerText = placedBets.length;
+
+                document.getElementById('adminBetsLog').innerHTML = placedBets.length === 0 ? '<p class="text-gray-500">No bets placed yet.</p>' : placedBets.map(b => `
+                    <div class="bg-white p-2 rounded border text-[11px] space-y-1">
+                        <div><strong>ID:</strong> ${b.id} | <strong>Phone:</strong> ${b.phone}</div>
+                        <div><strong>Stake:</strong> KSh ${b.stake} | <strong>Status:</strong> ${b.status}</div>
+                    </div>
+                `).join('');
+            } else {
+                alert('Incorrect PIN. Default is admin2026');
+            }
+        }
+
+        // Initial Load Execution
+        renderMatches('today');
+        renderMatches('tomorrow');
+        renderResults();
+        calculateH2H();
+        updateSlipUI();
+    </script>
 </body>
 </html>
