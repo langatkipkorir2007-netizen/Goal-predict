@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Predict - Smart International & Club Match Engine</title>
+    <title>Goal Predict - Professional Worldwide Football Betting Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -19,6 +19,10 @@
             }
         }
     </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col pb-24">
 
@@ -29,7 +33,7 @@
                 <i class="fa-solid fa-futbol text-2xl"></i>
                 <div>
                     <h1 class="font-black text-lg tracking-wide">GOAL PREDICT</h1>
-                    <p class="text-[10px] text-green-100" id="engineStatusBanner">Smart Calendar Feed Active ✅</p>
+                    <p class="text-[10px] text-green-100">Live Global Feed & Calendar Active ✅</p>
                 </div>
             </div>
             <button onclick="openVipModal()" class="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-black shadow hover:bg-yellow-300 transition">👑 VIP</button>
@@ -38,7 +42,7 @@
         <!-- Main Navigation Tabs -->
         <div class="flex bg-emerald-800 text-white text-xs font-semibold overflow-x-auto no-scrollbar border-t border-emerald-700">
             <button onclick="switchTab('home')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-white" data-tab="home">HOME</button>
-            <button onclick="switchTab('today')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="today">MATCHES & LIVE</button>
+            <button onclick="switchTab('today')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent" data-tab="today">ALL MATCHES</button>
             <button onclick="switchTab('slip')" class="tab-btn flex-1 py-2.5 px-4 text-center whitespace-nowrap border-b-2 border-transparent text-yellow-300 font-bold" data-tab="slip">BET SLIP (<span id="slipCount">0</span>)</button>
         </div>
     </header>
@@ -49,19 +53,19 @@
         <!-- HOME TAB -->
         <div id="tab-home" class="tab-content space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-betGreen space-y-2">
-                <div class="flex items-center gap-2 text-orange-600 font-bold text-sm" id="homeNoticeTitle">
-                    <i class="fa-solid fa-fire"></i> Global Football Feed Active
+                <div class="flex items-center gap-2 text-orange-600 font-bold text-sm">
+                    <i class="fa-solid fa-fire"></i> Welcome to Goal Predict
                 </div>
-                <p class="text-xs text-gray-600 leading-relaxed" id="homeNoticeDesc">Tofauti ya kalenda (International Breaks vs Ligi za Klabu) inajiseti yenyewe hapa moja kwa moja.</p>
-                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">System ready.</div>
+                <p class="text-xs text-gray-600 leading-relaxed">Chagua mechi kutoka ligi zote duniani kote, angalia odds za uhakika, na uweke mkeka wako kwa urahisi kupitia M-Pesa STK Push.</p>
+                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">Platform ready. Tap All Matches below to start betting.</div>
             </div>
         </div>
 
-        <!-- MATCHES TAB -->
+        <!-- MATCHES & CALENDAR TAB -->
         <div id="tab-today" class="tab-content hidden space-y-3">
             <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-xs text-gray-700 uppercase" id="feedTitleHeading">🌍 Match Center & Calendar (2026)</h3>
+                    <h3 class="font-bold text-xs text-gray-700 uppercase">🌍 Worldwide Fixtures & Calendar (2026)</h3>
                     <span id="selectedDateDisplay" class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Today</span>
                 </div>
 
@@ -69,7 +73,7 @@
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                     <button onclick="jumpToPreset(0)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-betGreen border border-emerald-200 hover:bg-emerald-100 transition whitespace-nowrap">🔥 Today</button>
                     <button onclick="jumpToPreset(1)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-700 border hover:bg-gray-100 transition whitespace-nowrap">Tomorrow</button>
-                    <button onclick="jumpToPreset(5)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-700 border hover:bg-gray-100 transition whitespace-nowrap">Next Week</button>
+                    <button onclick="jumpToPreset(3)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-700 border hover:bg-gray-100 transition whitespace-nowrap">This Week</button>
                 </div>
 
                 <!-- Date Picker -->
@@ -79,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- Matches Container -->
+            <!-- Matches Feed Container -->
             <div id="realMatchesContainer" class="space-y-3"></div>
         </div>
 
@@ -137,7 +141,7 @@
         </div>
     </nav>
 
-    <!-- Smart Calendar & Generalized Match Engine Script -->
+    <!-- Core Betting & Rendering Script -->
     <script>
         let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
         
@@ -181,17 +185,27 @@
             loadFixturesByDate(selectedDateStr);
         }
 
-        function getTeamLogoHtml(teamName) {
-            const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=00b050&color=fff&size=64&bold=true&rounded=true`;
-            return `<img src="${logoUrl}" alt="${teamName}" class="w-6 h-6 object-contain rounded-full shadow-xs bg-white p-0.5 border border-emerald-200" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=111827&color=fff&size=64&rounded=true'">`;
-        }
+        const officialLogos = {
+            "Arsenal": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+            "Chelsea": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+            "Man City": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+            "Liverpool": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+            "Man United": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
+            "Tottenham": "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg",
+            "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+            "Barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+            "Inter Milan": "https://upload.wikimedia.org/wikipedia/en/0/05/FC_Internazionale_Milano_2021.svg",
+            "AC Milan": "https://upload.wikimedia.org/wikipedia/en/d/d0/AC_Milan_Logo.svg",
+            "Juventus": "https://upload.wikimedia.org/wikipedia/en/b/bc/Juventus_FC_2017_icon.svg",
+            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/en/1/1b/FC_Bayern_Munich_logo_%282002%29.svg",
+            "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/en/6/67/Borussia_Dortmund_logo.svg",
+            "Paris Saint-Germain": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+            "Ajax": "https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg"
+        };
 
-        // Helper to check if a given date string is within the November 2026 International Break (Nov 9 - Nov 17, 2026)
-        function isInternationalBreak(dateStr) {
-            const d = new Date(dateStr);
-            const start = new Date("2026-11-09");
-            const end = new Date("2026-11-17");
-            return d >= start && d <= end;
+        function getTeamLogoHtml(teamName) {
+            const logoUrl = officialLogos[teamName] || `https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=00b050&color=fff&size=64&bold=true&rounded=true`;
+            return `<img src="${logoUrl}" alt="${teamName}" class="w-6 h-6 object-contain rounded-full shadow-xs bg-white p-0.5 border border-emerald-200" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=111827&color=fff&size=64&rounded=true'">`;
         }
 
         function loadFixturesByDate(dateStr) {
@@ -199,80 +213,63 @@
             if(!container) return;
 
             const isToday = (dateStr === todayStr);
-            const isIntlWindow = isInternationalBreak(dateStr);
+            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading worldwide fixtures for ${dateStr}...</div>`;
 
-            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading fixtures for ${dateStr}...</div>`;
-
-            let matchesCatalog = [];
-
-            if (isIntlWindow) {
-                // National Teams & International Break Fixtures (e.g. Nov 9 - Nov 17, 2026)
-                document.getElementById('engineStatusBanner').innerText = "🌍 FIFA International Break Window ✅";
-                document.getElementById('homeNoticeTitle').innerHTML = `<i class="fa-solid fa-earth-africa"></i> International Break Match Feed Active`;
-                document.getElementById('homeNoticeDesc').innerText = `Ligi za klabu zimesimama kwa muda (International Break). Mechi za timu za taifa (UEFA Nations League, World Cup Qualifiers, na Friendlies) zinaonyeshwa hapa.`;
-
-                matchesCatalog = [
-                    { league: "🇪🇺 UEFA Nations League - League A", pairs: [["Spain", "England"], ["Germany", "Netherlands"], ["Italy", "France"], ["Portugal", "Denmark"], ["Croatia", "Belgium"]] },
-                    { league: "🌍 Africa Cup of Nations Qualifiers / Friendlies", pairs: [["Nigeria", "Senegal"], ["Morocco", "Egypt"], ["Ghana", "Cameroon"], ["Ivory Coast", "Algeria"], ["Kenya", "Uganda"], ["Tanzania", "Zambia"]] },
-                    { league: "🌎 CONCACAF Nations League & World Cup Qualifiers", pairs: [["Mexico", "Jamaica"], ["USA", "Costa Rica"], ["Canada", "Panama"], ["Brazil", "Japan (Friendly)"], ["Argentina", "Uruguay (Friendly)"]] },
-                    { league: "🌏 Asian & World Cup Qualifiers", pairs: [["Japan", "Australia"], ["South Korea", "Iran"], ["Saudi Arabia", "Iraq"], ["UAE", "Uzbekistan"]] }
-                ];
-            } else {
-                // Regular Club Leagues
-                document.getElementById('engineStatusBanner').innerText = "Live Club Feed & Calendar Active ✅";
-                document.getElementById('homeNoticeTitle').innerHTML = `<i class="fa-solid fa-fire"></i> Worldwide Club Football Feed Active`;
-                document.getElementById('homeNoticeDesc').innerText = `Mechi za klabu kutoka ligi zote duniani kote zinaonekana hapa moja kwa moja.`;
-
-                matchesCatalog = [
-                    { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 English Premier League", pairs: [["Arsenal", "Chelsea"], ["Man City", "Liverpool"], ["Man United", "Tottenham"], ["Newcastle", "Aston Villa"], ["Brighton", "West Ham"], ["Crystal Palace", "Brentford"]] },
-                    { league: "🇪🇸 Spanish La Liga", pairs: [["Real Madrid", "Barcelona"], ["Atletico Madrid", "Real Sociedad"], ["Sevilla", "Villarreal"], ["Real Betis", "Valencia"]] },
-                    { league: "🇮🇹 Italian Serie A", pairs: [["Inter Milan", "AC Milan"], ["Juventus", "Napoli"], ["AS Roma", "Lazio"], ["Atalanta", "Fiorentina"]] },
-                    { league: "🇩🇪 German Bundesliga", pairs: [["Bayern Munich", "Borussia Dortmund"], ["Bayer Leverkusen", "RB Leipzig"], ["Stuttgart", "Eintracht Frankfurt"]] },
-                    { league: "🇫🇷 French Ligue 1", pairs: [["Paris Saint-Germain", "Marseille"], ["Monaco", "Lille"], ["Lyon", "Nice"]] },
-                    { league: "🇰🇪 Kenyan Premier League", pairs: [["Gor Mahia", "AFC Leopards"], ["Tusker FC", "Kenya Police"], ["Bandari FC", "KCB FC"]] },
-                    { league: "🇿🇦 South African DSTV Premiership", pairs: [["Mamelodi Sundowns", "Kaizer Chiefs"], ["Orlando Pirates", "SuperSport United"]] },
-                    { league: "🇸🇦 Saudi Arabia Pro League", pairs: [["Al Hilal", "Al Nassr"], ["Al Ittihad", "Al Ahli"]] }
-                ];
-            }
+            const worldLeagues = [
+                { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 English Premier League", teams: ["Arsenal", "Chelsea", "Man City", "Liverpool", "Man United", "Tottenham", "Newcastle", "Aston Villa", "Brighton", "West Ham", "Crystal Palace", "Brentford", "Everton", "Fulham", "Nottingham Forest", "Wolves", "Bournemouth", "Leicester", "Ipswich", "Southampton"] },
+                { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 English Championship", teams: ["Leeds United", "Burnley", "Sheffield United", "Norwich City", "West Brom", "Watford", "Middlesbrough", "Coventry City", "Hull City", "Sunderland", "Stoke City", "Swansea City"] },
+                { league: "🇪🇸 Spain - La Liga", teams: ["Real Madrid", "Barcelona", "Atletico Madrid", "Real Sociedad", "Villarreal", "Real Betis", "Valencia", "Sevilla", "Athletic Bilbao", "Girona", "Celta Vigo", "Osasuna"] },
+                { league: "🇮🇹 Italy - Serie A", teams: ["Inter Milan", "AC Milan", "Juventus", "Napoli", "AS Roma", "Lazio", "Atalanta", "Fiorentina", "Bologna", "Torino", "Udinese", "Monza"] },
+                { league: "🇩🇪 Germany - Bundesliga", teams: ["Bayern Munich", "Borussia Dortmund", "Bayer Leverkusen", "RB Leipzig", "Stuttgart", "Eintracht Frankfurt", "Wolfsburg", "Werder Bremen"] },
+                { league: "🇫🇷 France - Ligue 1", teams: ["Paris Saint-Germain", "Marseille", "Monaco", "Lille", "Lyon", "Nice", "Lens", "Rennes"] },
+                { league: "🇪🇺 UEFA Champions League", teams: ["Real Madrid", "Bayern Munich", "Arsenal", "Inter Milan", "Man City", "PSG", "Barcelona", "Borussia Dortmund"] },
+                { league: "🇰🇪 Kenya - Premier League", teams: ["Gor Mahia", "AFC Leopards", "Tusker FC", "Kenya Police", "Bandari FC", "KCB FC", "Sofapaka", "Ulinzi Stars", "Kariobangi Sharks", "Posta Rangers"] },
+                { league: "🇿🇦 South Africa - DSTV Premiership", teams: ["Mamelodi Sundowns", "Kaizer Chiefs", "Orlando Pirates", "SuperSport United", "AmaZulu", "Stellenbosch"] },
+                { league: "🇸🇦 Saudi Arabia - Pro League", teams: ["Al Hilal", "Al Nassr", "Al Ittihad", "Al Ahli", "Al Ettifaq", "Al Shabab"] }
+            ];
 
             let allMatches = [];
             let globalId = 1;
 
-            matchesCatalog.forEach((cat, catIdx) => {
-                cat.pairs.forEach((pair, pairIdx) => {
-                    const home = pair[0];
-                    const away = pair[1];
-                    const hour = 13 + ((catIdx + pairIdx) % 10);
-                    const minute = (pairIdx % 2 === 0) ? "00" : "30";
-
-                    let scoreDisplay = `${hour}:${minute} EAT`;
-                    let isLiveMatch = false;
-                    if(isToday && (pairIdx % 2 === 0)) {
-                        isLiveMatch = true;
-                        const homeGoals = (catIdx + pairIdx) % 3;
-                        const awayGoals = pairIdx % 2;
-                        const matchMinute = 45 + (pairIdx * 4) % 40;
-                        scoreDisplay = `<span class="text-red-600 font-black animate-pulse">🔴 ${matchMinute}'</span> <span class="bg-gray-900 text-white px-1.5 py-0.5 rounded font-black">${homeGoals} - ${awayGoals}</span>`;
-                    }
-
-                    allMatches.push({
-                        id: `MATCH-${globalId++}`,
-                        competition: cat.league,
-                        home: home,
-                        away: away,
-                        timeDisplay: scoreDisplay,
-                        isLive: isLiveMatch,
-                        odds: {
-                            home: (1.40 + ((catIdx + pairIdx) * 0.08) % 2.2).toFixed(2),
-                            draw: (3.10 + ((pairIdx * 0.09) % 1.2)).toFixed(2),
-                            away: (1.90 + ((catIdx + pairIdx * 0.1) % 2.5)).toFixed(2)
+            worldLeagues.forEach((cat, catIdx) => {
+                const t = cat.teams;
+                for (let i = 0; i < t.length; i += 2) {
+                    if (i + 1 < t.length) {
+                        const home = t[i];
+                        const away = t[i + 1];
+                        
+                        const hour = 12 + ((catIdx + i) % 10);
+                        const minute = (i % 2 === 0) ? "00" : "30";
+                        
+                        let scoreDisplay = `${hour}:${minute} EAT`;
+                        let isLiveMatch = false;
+                        if(isToday && (i % 3 === 0)) {
+                            isLiveMatch = true;
+                            const homeGoals = (catIdx + i) % 3;
+                            const awayGoals = (i) % 2;
+                            const matchMinute = 40 + (i * 3) % 45;
+                            scoreDisplay = `<span class="text-red-600 font-black animate-pulse">🔴 ${matchMinute}'</span> <span class="bg-gray-900 text-white px-1.5 py-0.5 rounded font-black">${homeGoals} - ${awayGoals}</span>`;
                         }
-                    });
-                });
+
+                        allMatches.push({
+                            id: `MATCH-${globalId++}`,
+                            competition: cat.league,
+                            home: home,
+                            away: away,
+                            timeDisplay: scoreDisplay,
+                            isLive: isLiveMatch,
+                            odds: {
+                                home: (1.35 + ((catIdx + i) * 0.07) % 2.5).toFixed(2),
+                                draw: (3.10 + ((i * 0.06) % 1.4)).toFixed(2),
+                                away: (1.80 + ((catIdx + i * 0.1) % 2.9)).toFixed(2)
+                            }
+                        });
+                    }
+                }
             });
 
             document.getElementById('selectedDateDisplay').innerText = dateStr;
-            document.getElementById('homeStatusCount').innerText = `Loaded ${allMatches.length} fixtures for ${dateStr} (${isIntlWindow ? 'International Break' : 'Club Season'}).`;
+            document.getElementById('homeStatusCount').innerText = `Loaded ${allMatches.length} worldwide fixtures for ${dateStr}.`;
 
             container.innerHTML = allMatches.map((m) => `
                 <div class="bg-white p-3 rounded-xl shadow-xs border ${m.isLive ? 'border-red-400 bg-red-50/20' : 'border-gray-200'} space-y-2">
@@ -395,7 +392,7 @@
             closeVipModal();
         }
 
-        // Initialize immediately on load
+        // Initialize immediately on page load
         window.addEventListener('DOMContentLoaded', () => {
             const picker = document.getElementById('fullYearDatePicker');
             if(picker) picker.value = selectedDateStr;
