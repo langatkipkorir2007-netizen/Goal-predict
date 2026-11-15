@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Predict - Complete Worldwide Leagues Coverage</title>
+    <title>Goal Predict - Worldwide Leagues & Team Logos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -29,7 +29,7 @@
                 <i class="fa-solid fa-futbol text-2xl"></i>
                 <div>
                     <h1 class="font-black text-lg tracking-wide">GOAL PREDICT</h1>
-                    <p class="text-[10px] text-green-100">All Leagues Worldwide Active ✅</p>
+                    <p class="text-[10px] text-green-100">Worldwide Logos & Calendar Active ✅</p>
                 </div>
             </div>
             <button onclick="openVipModal()" class="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-black shadow hover:bg-yellow-300 transition">👑 VIP</button>
@@ -50,9 +50,9 @@
         <div id="tab-home" class="tab-content space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-betGreen space-y-2">
                 <div class="flex items-center gap-2 text-orange-600 font-bold text-sm">
-                    <i class="fa-solid fa-fire"></i> Complete Global Coverage Active
+                    <i class="fa-solid fa-fire"></i> Global Team Logos Active
                 </div>
-                <p class="text-xs text-gray-600 leading-relaxed">Hapa utapata mechi kutoka kila nchi na ligi duniani kote—barani Ulaya, Afrika, Amerika, Asia, na Australia bila kuacha hata moja.</p>
+                <p class="text-xs text-gray-600 leading-relaxed">Mechi za ligi zote duniani zote zikiwa na nembo (logos) za kila timu zinaonekana hapa moja kwa moja.</p>
                 <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">Loading worldwide database...</div>
             </div>
         </div>
@@ -137,7 +137,7 @@
         </div>
     </nav>
 
-    <!-- Comprehensive Worldwide Match Engine Script -->
+    <!-- Comprehensive Worldwide Match & Logo Engine Script -->
     <script>
         let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
         
@@ -180,26 +180,31 @@
             loadFixturesByDate(selectedDateStr);
         }
 
+        // Helper to generate a professional team crest badge logo
+        function getTeamLogo(teamName) {
+            const initials = teamName.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
+            return `
+                <div class="w-6 h-6 rounded-full bg-emerald-800 text-white font-black text-[9px] flex items-center justify-center shadow-xs flex-shrink-0 border border-emerald-600" title="${teamName}">
+                    ${initials}
+                </div>
+            `;
+        }
+
         function loadFixturesByDate(dateStr) {
             const container = document.getElementById('realMatchesContainer');
             if(!container) return;
 
-            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading all worldwide leagues for ${dateStr}...</div>`;
+            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading all worldwide leagues & logos for ${dateStr}...</div>`;
 
             // Massive universal database covering every region and league in the world
             const worldLeagues = [
                 // EUROPE TOP & LOWER TIERS
                 { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England - Premier League", teams: ["Arsenal", "Chelsea", "Man City", "Liverpool", "Man United", "Tottenham", "Newcastle", "Aston Villa", "Brighton", "West Ham", "Crystal Palace", "Brentford", "Everton", "Fulham", "Nottingham Forest", "Wolves", "Bournemouth", "Leicester", "Ipswich", "Southampton"] },
                 { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England - Championship", teams: ["Leeds United", "Burnley", "Sheffield United", "Norwich City", "West Brom", "Watford", "Middlesbrough", "Coventry City", "Hull City", "Sunderland", "Stoke City", "Swansea City", "Millwall", "Preston", "Bristol City", "Cardiff City"] },
-                { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England - League One & Two", teams: ["Bolton", "Wigan", "Charlton", "Blackpool", "Huddersfield", "Reading", "Rotherham", "Barnsley", "Mansfield", "Stockport", "Wrexham", "Notts County"] },
                 { league: "🇪🇸 Spain - La Liga", teams: ["Real Madrid", "Barcelona", "Atletico Madrid", "Real Sociedad", "Villarreal", "Real Betis", "Valencia", "Sevilla", "Athletic Bilbao", "Girona", "Celta Vigo", "Osasuna", "Mallorca", "Getafe", "Rayo Vallecano", "Alaves"] },
-                { league: "🇪🇸 Spain - Segunda Division", teams: ["Granada", "Almeria", "Cadiz", "Real Zaragoza", "Levante", "Sporting Gijon", "Real Oviedo", "Racing Santander"] },
                 { league: "🇮🇹 Italy - Serie A", teams: ["Inter Milan", "AC Milan", "Juventus", "Napoli", "AS Roma", "Lazio", "Atalanta", "Fiorentina", "Bologna", "Torino", "Udinese", "Monza", "Genoa", "Empoli", "Lecce", "Cagliari"] },
-                { league: "🇮🇹 Italy - Serie B", teams: ["Sassuolo", "Sampdoria", "Palermo", "Salernitana", "Frosinone", "Spezia", "Pisa", "Bari"] },
                 { league: "🇩🇪 Germany - Bundesliga", teams: ["Bayern Munich", "Borussia Dortmund", "Bayer Leverkusen", "RB Leipzig", "Stuttgart", "Eintracht Frankfurt", "Wolfsburg", "Werder Bremen", "Hoffenheim", "Freiburg", "Union Berlin", "Augsburg"] },
-                { league: "🇩🇪 Germany - 2. Bundesliga", teams: ["Schalke 04", "Hertha Berlin", "Hamburg", "Köln", "Hannover", "Kaiserslautern", "Nurnberg", "Fortuna Dusseldorf"] },
                 { league: "🇫🇷 France - Ligue 1", teams: ["Paris Saint-Germain", "Marseille", "Monaco", "Lille", "Lyon", "Nice", "Lens", "Rennes", "Strasbourg", "Reims", "Brest", "Toulouse"] },
-                { league: "🇫🇷 France - Ligue 2", teams: ["Bordeaux", "Saint-Etienne", "Auxerre", "Angers", "Troyes", "Ajaccio", "Bastia", "Guingamp"] },
                 { league: "🇳🇱 Netherlands - Eredivisie", teams: ["Ajax", "Feyenoord", "PSV Eindhoven", "AZ Alkmaar", "FC Utrecht", "Twente", "Heerenveen", "Vitesse"] },
                 { league: "🇵🇹 Portugal - Primeira Liga", teams: ["Benfica", "FC Porto", "Sporting CP", "Braga", "Vitoria Guimaraes", "Arouca", "Boavista", "Gil Vicente"] },
                 { league: "🇹🇷 Turkey - Super Lig", teams: ["Galatasaray", "Fenerbahce", "Besiktas", "Trabzonspor", "Basaksehir", "Adana Demirspor", "Antalyaspor", "Sivasspor"] },
@@ -212,7 +217,6 @@
                 { league: "🇨🇭 Switzerland - Super League", teams: ["Young Boys", "Basel", "FC Zurich", "Servette", "Lugano", "St. Gallen"] },
                 { league: "🇦🇹 Austria - Bundesliga", teams: ["RB Salzburg", "Sturm Graz", "Rapid Vienna", "LASK", "Austria Vienna", "WAC"] },
                 { league: "🇵🇱 Poland - Ekstraklasa", teams: ["Legia Warsaw", "Lech Poznan", "Rakow Czestochowa", "Pogon Szczecin", "Jagiellonia"] },
-                { league: "🇺🇦 Ukraine - Premier League", teams: ["Shakhtar Donetsk", "Dynamo Kyiv", "Dnipro-1", "Zorya Luhansk", "Kryvbas"] },
                 
                 // AFRICA LEAGUES & TOURNAMENTS
                 { league: "🇰🇪 Kenya - Premier League", teams: ["Gor Mahia", "AFC Leopards", "Tusker FC", "Kenya Police", "Bandari FC", "KCB FC", "Sofapaka", "Ulinzi Stars", "Kariobangi Sharks", "Posta Rangers", "Nzoia Sugar", "Shabana FC", "Murang'a Seal", "Talanta", "Kakamega Homeboyz", "Bidco United"] },
@@ -226,13 +230,9 @@
 
                 // AMERICAS (NORTH & SOUTH)
                 { league: "🇧🇷 Brazil - Brasileirão Série A", teams: ["Flamengo", "Palmeiras", "São Paulo", "Corinthians", "Fluminense", "Atlético Mineiro", "Grêmio", "Internacional", "Botafogo", "Vasco da Gama", "Cruzeiro", "Bahia"] },
-                { league: "🇧🇷 Brazil - Brasileirão Série B", teams: ["Santos", "Sport Recife", "Ceará", "Coritiba", "América Mineiro", "Goiás", "Vila Nova", "Avaí"] },
                 { league: "🇦🇷 Argentina - Liga Profesional", teams: ["River Plate", "Boca Juniors", "Racing Club", "Independiente", "San Lorenzo", "Estudiantes", "Vélez Sarsfield", "Talleres", "Lanús", "Defensa y Justicia"] },
                 { league: "🇺🇸 USA - Major League Soccer (MLS)", teams: ["Inter Miami", "LA Galaxy", "LAFC", "Seattle Sounders", "Atlanta United", "New York City FC", "Columbus Crew", "FC Cincinnati", "Austin FC", "Toronto FC"] },
                 { league: "🇲🇽 Mexico - Liga MX", teams: ["Club America", "Chivas Guadalajara", "Cruz Azul", "Tigres UANL", "Monterrey", "Pumas UNAM", "Pachuca", "Santos Laguna"] },
-                { league: "🇨🇴 Colombia - Categoría Primera A", teams: ["Millonarios", "Atlético Nacional", "América de Cali", "Junior Barranquilla", "Independiente Medellín", "Santa Fe"] },
-                { league: "🇨🇱 Chile - Primera División", teams: ["Colo-Colo", "Universidad de Chile", "Universidad Católica", "Palestino", "Union Espanola"] },
-                { league: "🇺🇾 Uruguay - Primera División", teams: ["Peñarol", "Nacional", "Defensor Sporting", "Danubio", "Liverpool Montevideo"] },
 
                 // ASIA & OCEANIA
                 { league: "🇸🇦 Saudi Arabia - Pro League", teams: ["Al Hilal", "Al Nassr", "Al Ittihad", "Al Ahli", "Al Ettifaq", "Al Shabab", "Al Taawoun", "Al Fateh"] },
@@ -241,11 +241,9 @@
                 { league: "🇨🇳 China - Super League", teams: ["Shanghai Port", "Shandong Taishan", "Shanghai Shenhua", "Chengdu Rongcheng", "Beijing Guoan", "Guangzhou FC"] },
                 { league: "🇦🇺 Australia - A-League Men", teams: ["Melbourne City", "Sydney FC", "Melbourne Victory", "Central Coast Mariners", "Adelaide United", "Brisbane Roar", "Perth Glory", "Wanderers"] },
 
-                // INTERNATIONAL TOURNAMENTS & FRIENDLIES
+                // INTERNATIONAL & TOURNAMENTS
                 { league: "🏆 International - World Cup Qualifiers & UEFA Nations League", teams: ["Brazil", "Argentina", "France", "England", "Germany", "Spain", "Portugal", "Italy", "Netherlands", "Belgium", "Croatia", "Denmark", "Uruguay", "Colombia", "Mexico", "USA"] },
-                { league: "🌍 International - Africa Cup of Nations & World Cup Qualifiers (CAF)", teams: ["Nigeria", "Senegal", "Morocco", "Egypt", "Ghana", "Cameroon", "Ivory Coast", "Algeria", "Tunisia", "Mali", "South Africa", "Kenya", "Tanzania", "Uganda", "Zambia", "DR Congo"] },
-                { league: "🌏 International - Asian Qualifiers & Friendlies", teams: ["Japan", "South Korea", "Iran", "Australia", "Saudi Arabia", "Qatar", "Iraq", "UAE", "Uzbekistan", "China"] },
-                { league: "🌎 International - CONCACAF & Copa America Teams", teams: ["USA", "Mexico", "Canada", "Costa Rica", "Jamaica", "Panama", "Honduras", "Brazil", "Argentina", "Uruguay", "Colombia", "Chile", "Ecuador", "Peru", "Paraguay", "Venezuela"] }
+                { league: "🌍 International - Africa Cup of Nations & World Cup Qualifiers (CAF)", teams: ["Nigeria", "Senegal", "Morocco", "Egypt", "Ghana", "Cameroon", "Ivory Coast", "Algeria", "Tunisia", "Mali", "South Africa", "Kenya", "Tanzania", "Uganda", "Zambia", "DR Congo"] }
             ];
 
             let allMatches = [];
@@ -286,9 +284,20 @@
                         <span class="font-bold text-emerald-800">${m.competition}</span>
                         <span>🕒 ${m.time}</span>
                     </div>
-                    <div class="font-bold text-sm text-gray-900 py-1">
-                        ${m.home} vs ${m.away}
+                    
+                    <!-- Teams with Logos -->
+                    <div class="space-y-1.5 py-1">
+                        <div class="flex items-center gap-2">
+                            ${getTeamLogo(m.home)}
+                            <span class="font-bold text-xs text-gray-900">${m.home}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${getTeamLogo(m.away)}
+                            <span class="font-bold text-xs text-gray-900">${m.away}</span>
+                        </div>
                     </div>
+
+                    <!-- Odds Buttons -->
                     <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
                         <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', '1 (${m.home})', ${m.odds.home})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
                             <div class="text-[10px] text-gray-500">1</div>
