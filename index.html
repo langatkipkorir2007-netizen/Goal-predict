@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Predict - Worldwide Live Football Matches & Calendar</title>
+    <title>Goal Predict - Worldwide Live Football Matches</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -53,7 +53,7 @@
                     <i class="fa-solid fa-fire"></i> Worldwide Football Feed Active
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">Mechi za ligi zote duniani kote (EPL, La Liga, Serie A, UEFA n.k.) zinaonekana hapa moja kwa moja.</p>
-                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">Loading global fixtures...</div>
+                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">System ready. Tap Live Matches below.</div>
             </div>
         </div>
 
@@ -136,11 +136,16 @@
         </div>
     </nav>
 
-    <!-- Comprehensive Worldwide Match Engine Script -->
+    <!-- Bulletproof Execution Script -->
     <script>
-        const API_KEY = "ca850714c181432cb9daec4bff7f8fa5";[span_0](start_span)[span_0](end_span)
         let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
-        let selectedDateStr = new Date().toISOString().split('T')[0];
+        
+        // Get local YYYY-MM-DD date safely
+        const todayObj = new Date();
+        const year = todayObj.getFullYear();
+        const month = String(todayObj.getMonth() + 1).padStart(2, '0');
+        const day = String(todayObj.getDate()).padStart(2, '0');
+        let selectedDateStr = `${year}-${month}-${day}`;
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -159,7 +164,11 @@
         function jumpToPreset(daysOffset) {
             const d = new Date();
             d.setDate(d.getDate() + daysOffset);
-            selectedDateStr = d.toISOString().split('T')[0];
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const da = String(d.getDate()).padStart(2, '0');
+            selectedDateStr = `${y}-${m}-${da}`;
+            
             const picker = document.getElementById('fullYearDatePicker');
             if(picker) picker.value = selectedDateStr;
             updateDateDisplay();
@@ -182,44 +191,37 @@
             const container = document.getElementById('realMatchesContainer');
             if(!container) return;
 
-            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading worldwide fixtures for ${dateStr}...</div>`;
-
-            // Extensive worldwide match dataset covering top global leagues
+            // Comprehensive worldwide matches dataset
             const worldwideMatches = [
-                { id: 201, competition: { name: "English Premier League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Chelsea" }, utcDate: `${dateStr}T13:30:00Z` },
-                { id: 202, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester City" }, awayTeam: { name: "Liverpool" }, utcDate: `${dateStr}T16:00:00Z` },
-                { id: 203, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester United" }, awayTeam: { name: "Tottenham Hotspur" }, utcDate: `${dateStr}T18:30:00Z` },
-                { id: 204, competition: { name: "English Premier League" }, homeTeam: { name: "Newcastle United" }, awayTeam: { name: "Aston Villa" }, utcDate: `${dateStr}T15:00:00Z` },
-                { id: 205, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Barcelona" }, utcDate: `${dateStr}T21:00:00Z` },
-                { id: 206, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Atletico Madrid" }, awayTeam: { name: "Real Sociedad" }, utcDate: `${dateStr}T19:00:00Z` },
-                { id: 207, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Sevilla FC" }, awayTeam: { name: "Villarreal" }, utcDate: `${dateStr}T17:00:00Z` },
-                { id: 208, competition: { name: "Italian Serie A" }, homeTeam: { name: "Inter Milan" }, awayTeam: { name: "AC Milan" }, utcDate: `${dateStr}T20:45:00Z` },
-                { id: 209, competition: { name: "Italian Serie A" }, homeTeam: { name: "Juventus" }, awayTeam: { name: "Napoli" }, utcDate: `${dateStr}T18:00:00Z` },
-                { id: 210, competition: { name: "Italian Serie A" }, homeTeam: { name: "AS Roma" }, awayTeam: { name: "Lazio" }, utcDate: `${dateStr}T15:00:00Z` },
-                { id: 211, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayern Munich" }, awayTeam: { name: "Borussia Dortmund" }, utcDate: `${dateStr}T17:30:00Z` },
-                { id: 212, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayer Leverkusen" }, awayTeam: { name: "RB Leipzig" }, utcDate: `${dateStr}T15:30:00Z` },
-                { id: 213, competition: { name: "French Ligue 1" }, homeTeam: { name: "Paris Saint-Germain" }, awayTeam: { name: "Marseille" }, utcDate: `${dateStr}T21:00:00Z` },
-                { id: 214, competition: { name: "French Ligue 1" }, homeTeam: { name: "Monaco" }, awayTeam: { name: "Lille" }, utcDate: `${dateStr}T17:00:00Z` },
-                { id: 215, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Bayern Munich" }, utcDate: `${dateStr}T22:00:00Z` },
-                { id: 216, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Inter Milan" }, utcDate: `${dateStr}T22:00:00Z` },
-                { id: 217, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Gor Mahia" }, awayTeam: { name: "AFC Leopards" }, utcDate: `${dateStr}T15:00:00Z` },
-                { id: 218, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Tusker FC" }, awayTeam: { name: "Kenya Police" }, utcDate: `${dateStr}T15:00:00Z` },
-                { id: 219, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Bandari FC" }, awayTeam: { name: "KCB FC" }, utcDate: `${dateStr}T14:00:00Z` }
+                { id: 301, competition: { name: "English Premier League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Chelsea" }, time: "15:00 EAT" },
+                { id: 302, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester City" }, awayTeam: { name: "Liverpool" }, time: "17:30 EAT" },
+                { id: 303, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester United" }, awayTeam: { name: "Tottenham Hotspur" }, time: "20:00 EAT" },
+                { id: 304, competition: { name: "English Premier League" }, homeTeam: { name: "Newcastle United" }, awayTeam: { name: "Aston Villa" }, time: "16:00 EAT" },
+                { id: 305, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Barcelona" }, time: "22:00 EAT" },
+                { id: 306, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Atletico Madrid" }, awayTeam: { name: "Real Sociedad" }, time: "19:30 EAT" },
+                { id: 307, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Sevilla FC" }, awayTeam: { name: "Villarreal" }, time: "18:00 EAT" },
+                { id: 308, competition: { name: "Italian Serie A" }, homeTeam: { name: "Inter Milan" }, awayTeam: { name: "AC Milan" }, time: "21:45 EAT" },
+                { id: 309, competition: { name: "Italian Serie A" }, homeTeam: { name: "Juventus" }, awayTeam: { name: "Napoli" }, time: "19:00 EAT" },
+                { id: 310, competition: { name: "Italian Serie A" }, homeTeam: { name: "AS Roma" }, awayTeam: { name: "Lazio" }, time: "15:30 EAT" },
+                { id: 311, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayern Munich" }, awayTeam: { name: "Borussia Dortmund" }, time: "17:30 EAT" },
+                { id: 312, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayer Leverkusen" }, awayTeam: { name: "RB Leipzig" }, time: "15:30 EAT" },
+                { id: 313, competition: { name: "French Ligue 1" }, homeTeam: { name: "Paris Saint-Germain" }, awayTeam: { name: "Marseille" }, time: "22:00 EAT" },
+                { id: 314, competition: { name: "French Ligue 1" }, homeTeam: { name: "Monaco" }, awayTeam: { name: "Lille" }, time: "18:00 EAT" },
+                { id: 315, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Bayern Munich" }, time: "23:00 EAT" },
+                { id: 316, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Inter Milan" }, time: "23:00 EAT" },
+                { id: 317, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Gor Mahia" }, awayTeam: { name: "AFC Leopards" }, time: "15:00 EAT" },
+                { id: 318, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Tusker FC" }, awayTeam: { name: "Kenya Police" }, time: "15:00 EAT" },
+                { id: 319, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Bandari FC" }, awayTeam: { name: "KCB FC" }, time: "14:00 EAT" }
             ];
 
-            renderMatchCards(worldwideMatches);
-        }
+            document.getElementById('selectedDateDisplay').innerText = dateStr;
+            document.getElementById('homeStatusCount').innerText = `Loaded ${worldwideMatches.length} worldwide fixtures for ${dateStr}.`;
 
-        function renderMatchCards(matches) {
-            const container = document.getElementById('realMatchesContainer');
-            document.getElementById('selectedDateDisplay').innerText = selectedDateStr;
-            document.getElementById('homeStatusCount').innerText = `Loaded ${matches.length} worldwide fixtures.`;
-
-            container.innerHTML = matches.map((m, idx) => {
+            container.innerHTML = worldwideMatches.map((m, idx) => {
                 const homeTeam = m.homeTeam.name;
                 const awayTeam = m.awayTeam.name;
                 const competition = m.competition.name;
-                const matchTime = new Date(m.utcDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " EAT";
+                const matchTime = m.time;
                 
                 const odd1 = (1.65 + (idx * 0.08) % 1.5).toFixed(2);
                 const oddX = (3.10 + (idx * 0.05) % 0.8).toFixed(2);
@@ -266,8 +268,10 @@
         }
 
         function updateSlipUI() {
-            document.getElementById('slipCount').innerText = activeBetSlip.length;
-            document.getElementById('slipBadge').innerText = activeBetSlip.length;
+            const countEl = document.getElementById('slipCount');
+            const badgeEl = document.getElementById('slipBadge');
+            if(countEl) countEl.innerText = activeBetSlip.length;
+            if(badgeEl) badgeEl.innerText = activeBetSlip.length;
 
             const container = document.getElementById('betSlipItems');
             if(!container) return;
@@ -302,10 +306,15 @@
         }
 
         function updateSlipTotals() {
-            const stake = parseFloat(document.getElementById('stakeInput').value) || 0;
-            const totalOdds = parseFloat(document.getElementById('slipTotalOdds').innerText) || 1.00;
+            const stakeInput = document.getElementById('stakeInput');
+            const totalOddsEl = document.getElementById('slipTotalOdds');
+            const potentialWinEl = document.getElementById('slipPotentialWin');
+            if(!stakeInput || !totalOddsEl || !potentialWinEl) return;
+
+            const stake = parseFloat(stakeInput.value) || 0;
+            const totalOdds = parseFloat(totalOddsEl.innerText) || 1.00;
             const potentialWin = stake * totalOdds;
-            document.getElementById('slipPotentialWin').innerText = `KSh ${potentialWin.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+            potentialWinEl.innerText = `KSh ${potentialWin.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
         }
 
         function placeBetMpesa() {
@@ -331,11 +340,13 @@
             closeVipModal();
         }
 
-        // Initialize immediately
-        const picker = document.getElementById('fullYearDatePicker');
-        if(picker) picker.value = selectedDateStr;
-        loadFixturesByDate(selectedDateStr);
-        updateSlipUI();
+        // Run on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const picker = document.getElementById('fullYearDatePicker');
+            if(picker) picker.value = selectedDateStr;
+            loadFixturesByDate(selectedDateStr);
+            updateSlipUI();
+        });
     </script>
 </body>
 </html>
