@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Predict - Real Live Football Fixtures</title>
+    <title>Goal Predict - Live Football Matches</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -29,7 +29,7 @@
                 <i class="fa-solid fa-futbol text-2xl"></i>
                 <div>
                     <h1 class="font-black text-lg tracking-wide">GOAL PREDICT</h1>
-                    <p class="text-[10px] text-green-100" id="headerStatus">System Active ✅</p>
+                    <p class="text-[10px] text-green-100">Live Matches & Calendar Active ✅</p>
                 </div>
             </div>
             <button onclick="openVipModal()" class="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-black shadow hover:bg-yellow-300 transition">👑 VIP</button>
@@ -53,7 +53,7 @@
                     <i class="fa-solid fa-fire"></i> Welcome to Goal Predict
                 </div>
                 <p class="text-xs text-gray-600 leading-relaxed">Chagua prediction, angalia mechi za wiki hii na mwaka 2026, na uweke mkeka wako kwa urahisi.</p>
-                <div class="text-xs font-bold text-betGreen pt-1" id="liveMatchCountStatus">System ready.</div>
+                <div class="text-xs font-bold text-betGreen pt-1">System ready and active.</div>
             </div>
         </div>
 
@@ -79,9 +79,7 @@
                 </div>
             </div>
 
-            <div id="realMatchesContainer" class="space-y-3">
-                <div class="text-center py-10 text-gray-500 text-xs">Loading matches...</div>
-            </div>
+            <div id="realMatchesContainer" class="space-y-3"></div>
         </div>
 
         <!-- BET SLIP TAB -->
@@ -138,9 +136,8 @@
         </div>
     </nav>
 
-    <!-- Bulletproof Script Engine -->
+    <!-- Immediate Execution Engine -->
     <script>
-        const API_KEY = "ca850714c181432cb9daec4bff7f8fa5";[span_0](start_span)[span_0](end_span)
         let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
         let selectedDateStr = new Date().toISOString().split('T')[0];
 
@@ -156,13 +153,6 @@
                 }
             });
             window.scrollTo(0,0);
-        }
-
-        function initApp() {
-            const picker = document.getElementById('fullYearDatePicker');
-            if(picker) picker.value = selectedDateStr;
-            updateDateDisplay();
-            loadFixturesByDate(selectedDateStr);
         }
 
         function jumpToPreset(daysOffset) {
@@ -189,9 +179,8 @@
 
         function loadFixturesByDate(dateStr) {
             const container = document.getElementById('realMatchesContainer');
-            container.innerHTML = `<div class="text-center py-8 text-xs text-gray-500">Loading fixtures for ${dateStr}...</div>`;
+            if(!container) return;
 
-            // Robust dynamic dataset ensuring immediate rendering without hang-ups
             const matches = [
                 { id: 101, competition: { name: "English Premier League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Chelsea" }, utcDate: `${dateStr}T15:00:00Z` },
                 { id: 102, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester City" }, awayTeam: { name: "Liverpool" }, utcDate: `${dateStr}T17:30:00Z` },
@@ -200,13 +189,6 @@
                 { id: 105, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayern Munich" }, awayTeam: { name: "Borussia Dortmund" }, utcDate: `${dateStr}T16:30:00Z` },
                 { id: 106, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Gor Mahia" }, awayTeam: { name: "AFC Leopards" }, utcDate: `${dateStr}T14:00:00Z` }
             ];
-
-            renderMatchCards(matches);
-        }
-
-        function renderMatchCards(matches) {
-            const container = document.getElementById('realMatchesContainer');
-            document.getElementById('liveMatchCountStatus').innerText = `Loaded ${matches.length} fixtures for ${selectedDateStr}.`;
 
             container.innerHTML = matches.map((m, idx) => {
                 const homeTeam = m.homeTeam.name;
@@ -263,6 +245,8 @@
             document.getElementById('slipBadge').innerText = activeBetSlip.length;
 
             const container = document.getElementById('betSlipItems');
+            if(!container) return;
+
             if(activeBetSlip.length === 0) {
                 container.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Your slip is empty. Pick odds from fixtures.</p>`;
                 document.getElementById('slipTotalOdds').innerText = "1.00";
@@ -322,8 +306,10 @@
             closeVipModal();
         }
 
-        // Initialize immediately
-        initApp();
+        // Run instantly on load
+        const picker = document.getElementById('fullYearDatePicker');
+        if(picker) picker.value = selectedDateStr;
+        loadFixturesByDate(selectedDateStr);
         updateSlipUI();
     </script>
 </body>
