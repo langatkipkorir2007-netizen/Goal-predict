@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal Predict - Worldwide Live Football Matches</title>
+    <title>Goal Predict - Massive Worldwide Fixtures</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -29,7 +29,7 @@
                 <i class="fa-solid fa-futbol text-2xl"></i>
                 <div>
                     <h1 class="font-black text-lg tracking-wide">GOAL PREDICT</h1>
-                    <p class="text-[10px] text-green-100">Worldwide Feed & Calendar Active ✅</p>
+                    <p class="text-[10px] text-green-100">BetPawa Style Worldwide Feed ✅</p>
                 </div>
             </div>
             <button onclick="openVipModal()" class="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-black shadow hover:bg-yellow-300 transition">👑 VIP</button>
@@ -50,10 +50,10 @@
         <div id="tab-home" class="tab-content space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-betGreen space-y-2">
                 <div class="flex items-center gap-2 text-orange-600 font-bold text-sm">
-                    <i class="fa-solid fa-fire"></i> Worldwide Football Feed Active
+                    <i class="fa-solid fa-fire"></i> Massive Global Match Catalog Active
                 </div>
-                <p class="text-xs text-gray-600 leading-relaxed">Mechi za ligi zote duniani kote (EPL, La Liga, Serie A, UEFA n.k.) zinaonekana hapa moja kwa moja.</p>
-                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">System ready. Tap Live Matches below.</div>
+                <p class="text-xs text-gray-600 leading-relaxed">Mechi nyingi zaidi za kila ligi duniani zimeongezwa. Chagua mechi za leo au chagua tarehe yoyote mwaka 2026 kwenye kalenda.</p>
+                <div class="text-xs font-bold text-betGreen pt-1" id="homeStatusCount">Ready. Tap Live Matches.</div>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
         <div id="tab-today" class="tab-content hidden space-y-3">
             <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-xs text-gray-700 uppercase">🌍 Worldwide Fixtures & Calendar (2026)</h3>
+                    <h3 class="font-bold text-xs text-gray-700 uppercase">🌍 Worldwide Betting Fixtures (2026)</h3>
                     <span id="selectedDateDisplay" class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Today</span>
                 </div>
 
@@ -79,6 +79,7 @@
                 </div>
             </div>
 
+            <!-- Massive Match Feed Container -->
             <div id="realMatchesContainer" class="space-y-3"></div>
         </div>
 
@@ -100,7 +101,7 @@
                         <span>Potential Payout:</span>
                         <span id="slipPotentialWin" class="text-betGreen">KSh 100</span>
                     </div>
-                    <button onclick="placeBetMpesa()" class="w-full bg-betGreen text-white py-3 rounded-xl font-bold text-xs shadow hover:bg-emerald-700 transition">Place Real Bet via M-Pesa STK Push</button>
+                    <button onclick="placeBetMpesa()" class="w-full bg-betGreen text-white py-3 rounded-xl font-bold text-xs shadow hover:bg-emerald-700 transition">Place Bet via M-Pesa STK Push</button>
                 </div>
             </div>
         </div>
@@ -136,11 +137,10 @@
         </div>
     </nav>
 
-    <!-- Bulletproof Execution Script -->
+    <!-- Massive Worldwide Match Generator Engine -->
     <script>
         let activeBetSlip = JSON.parse(localStorage.getItem('gp_slip')) || [];
         
-        // Get local YYYY-MM-DD date safely
         const todayObj = new Date();
         const year = todayObj.getFullYear();
         const month = String(todayObj.getMonth() + 1).padStart(2, '0');
@@ -171,88 +171,84 @@
             
             const picker = document.getElementById('fullYearDatePicker');
             if(picker) picker.value = selectedDateStr;
-            updateDateDisplay();
             loadFixturesByDate(selectedDateStr);
         }
 
         function onDateInputChanged(val) {
             if(!val) return;
             selectedDateStr = val;
-            updateDateDisplay();
             loadFixturesByDate(selectedDateStr);
-        }
-
-        function updateDateDisplay() {
-            const disp = document.getElementById('selectedDateDisplay');
-            if(disp) disp.innerText = selectedDateStr;
         }
 
         function loadFixturesByDate(dateStr) {
             const container = document.getElementById('realMatchesContainer');
             if(!container) return;
 
-            // Comprehensive worldwide matches dataset
-            const worldwideMatches = [
-                { id: 301, competition: { name: "English Premier League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Chelsea" }, time: "15:00 EAT" },
-                { id: 302, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester City" }, awayTeam: { name: "Liverpool" }, time: "17:30 EAT" },
-                { id: 303, competition: { name: "English Premier League" }, homeTeam: { name: "Manchester United" }, awayTeam: { name: "Tottenham Hotspur" }, time: "20:00 EAT" },
-                { id: 304, competition: { name: "English Premier League" }, homeTeam: { name: "Newcastle United" }, awayTeam: { name: "Aston Villa" }, time: "16:00 EAT" },
-                { id: 305, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Barcelona" }, time: "22:00 EAT" },
-                { id: 306, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Atletico Madrid" }, awayTeam: { name: "Real Sociedad" }, time: "19:30 EAT" },
-                { id: 307, competition: { name: "Spanish La Liga" }, homeTeam: { name: "Sevilla FC" }, awayTeam: { name: "Villarreal" }, time: "18:00 EAT" },
-                { id: 308, competition: { name: "Italian Serie A" }, homeTeam: { name: "Inter Milan" }, awayTeam: { name: "AC Milan" }, time: "21:45 EAT" },
-                { id: 309, competition: { name: "Italian Serie A" }, homeTeam: { name: "Juventus" }, awayTeam: { name: "Napoli" }, time: "19:00 EAT" },
-                { id: 310, competition: { name: "Italian Serie A" }, homeTeam: { name: "AS Roma" }, awayTeam: { name: "Lazio" }, time: "15:30 EAT" },
-                { id: 311, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayern Munich" }, awayTeam: { name: "Borussia Dortmund" }, time: "17:30 EAT" },
-                { id: 312, competition: { name: "German Bundesliga" }, homeTeam: { name: "Bayer Leverkusen" }, awayTeam: { name: "RB Leipzig" }, time: "15:30 EAT" },
-                { id: 313, competition: { name: "French Ligue 1" }, homeTeam: { name: "Paris Saint-Germain" }, awayTeam: { name: "Marseille" }, time: "22:00 EAT" },
-                { id: 314, competition: { name: "French Ligue 1" }, homeTeam: { name: "Monaco" }, awayTeam: { name: "Lille" }, time: "18:00 EAT" },
-                { id: 315, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Real Madrid" }, awayTeam: { name: "Bayern Munich" }, time: "23:00 EAT" },
-                { id: 316, competition: { name: "UEFA Champions League" }, homeTeam: { name: "Arsenal" }, awayTeam: { name: "Inter Milan" }, time: "23:00 EAT" },
-                { id: 317, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Gor Mahia" }, awayTeam: { name: "AFC Leopards" }, time: "15:00 EAT" },
-                { id: 318, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Tusker FC" }, awayTeam: { name: "Kenya Police" }, time: "15:00 EAT" },
-                { id: 319, competition: { name: "Kenyan Premier League" }, homeTeam: { name: "Bandari FC" }, awayTeam: { name: "KCB FC" }, time: "14:00 EAT" }
+            // Massive pool of global teams categorized by league for high-volume generation
+            const leaguesData = [
+                { league: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 English Premier League", pairs: [["Arsenal", "Chelsea"], ["Man City", "Liverpool"], ["Man United", "Tottenham"], ["Newcastle", "Aston Villa"], ["Brighton", "West Ham"], ["Crystal Palace", "Brentford"], ["Everton", "Fulham"], ["Nottingham Forest", "Wolves"]] },
+                { league: "🇪🇸 Spanish La Liga", pairs: [["Real Madrid", "Barcelona"], ["Atletico Madrid", "Real Sociedad"], ["Sevilla", "Villarreal"], ["Real Betis", "Valencia"], ["Athletic Bilbao", "Girona"], ["Celta Vigo", "Osasuna"]] },
+                { league: "🇮🇹 Italian Serie A", pairs: [["Inter Milan", "AC Milan"], ["Juventus", "Napoli"], ["AS Roma", "Lazio"], ["Atalanta", "Fiorentina"], ["Bologna", "Torino"], ["Udinese", "Monza"]] },
+                { league: "🇩🇪 German Bundesliga", pairs: [["Bayern Munich", "Borussia Dortmund"], ["Bayer Leverkusen", "RB Leipzig"], ["Stuttgart", "Eintracht Frankfurt"], ["Wolfsburg", "Werder Bremen"]] },
+                { league: "🇫🇷 French Ligue 1", pairs: [["Paris Saint-Germain", "Marseille"], ["Monaco", "Lille"], ["Lyon", "Nice"], ["Lens", "Rennes"]] },
+                { league: "🇪🇺 UEFA Champions League", pairs: [["Real Madrid", "Bayern Munich"], ["Arsenal", "Inter Milan"], ["Man City", "PSG"], ["Barcelona", "Borussia Dortmund"]] },
+                { league: "🇰🇪 Kenyan Premier League", pairs: [["Gor Mahia", "AFC Leopards"], ["Tusker FC", "Kenya Police"], ["Bandari FC", "KCB FC"], ["Sofapaka", "Ulinzi Stars"], ["Kariobangi Sharks", "Posta Rangers"]] },
+                { league: "🇿🇦 South African DSTV Premiership", pairs: [["Mamelodi Sundowns", "Kaizer Chiefs"], ["Orlando Pirates", "SuperSport United"], ["AmaZulu", "Stellenbosch"]] },
+                { league: "🌍 CAF Champions League", pairs: [["Al Ahly", "Wydad AC"], ["Esperance", "Simba SC"], ["TP Mazembe", "Petro Atletico"]] },
+                { league: "🇳🇱 Dutch Eredivisie", pairs: [["Ajax", "Feyenoord"], ["PSV Eindhoven", "AZ Alkmaar"], ["FC Utrecht", "Twente"]] }
             ];
 
+            let generatedMatches = [];
+            let matchIdCounter = 1;
+
+            leaguesData.forEach((cat, catIdx) => {
+                cat.pairs.forEach((pair, pairIdx) => {
+                    const timeHour = 13 + ((catIdx + pairIdx) % 10);
+                    const timeMinute = (pairIdx % 2 === 0) ? "00" : "30";
+                    
+                    generatedMatches.push({
+                        id: `MATCH-${catIdx}-${pairIdx}`,
+                        competition: cat.league,
+                        home: pair[0],
+                        away: pair[1],
+                        time: `${timeHour}:${timeMinute} EAT`,
+                        odds: {
+                            home: (1.50 + ((catIdx + pairIdx) * 0.07) % 2.2).toFixed(2),
+                            draw: (3.10 + ((pairIdx * 0.09) % 1.2)).toFixed(2),
+                            away: (2.00 + ((pairIdx * 0.11) % 2.5)).toFixed(2)
+                        }
+                    });
+                });
+            });
+
             document.getElementById('selectedDateDisplay').innerText = dateStr;
-            document.getElementById('homeStatusCount').innerText = `Loaded ${worldwideMatches.length} worldwide fixtures for ${dateStr}.`;
+            document.getElementById('homeStatusCount').innerText = `Loaded ${generatedMatches.length} worldwide matches for ${dateStr}.`;
 
-            container.innerHTML = worldwideMatches.map((m, idx) => {
-                const homeTeam = m.homeTeam.name;
-                const awayTeam = m.awayTeam.name;
-                const competition = m.competition.name;
-                const matchTime = m.time;
-                
-                const odd1 = (1.65 + (idx * 0.08) % 1.5).toFixed(2);
-                const oddX = (3.10 + (idx * 0.05) % 0.8).toFixed(2);
-                const odd2 = (2.10 + (idx * 0.12) % 1.8).toFixed(2);
-
-                return `
-                    <div class="bg-white p-3 rounded-xl shadow-xs border border-gray-200 space-y-2">
-                        <div class="flex justify-between items-center text-[10px] text-gray-500 border-b pb-1">
-                            <span class="font-bold text-emerald-800">${competition}</span>
-                            <span>🕒 ${matchTime}</span>
-                        </div>
-                        <div class="font-bold text-sm text-gray-900 py-1">
-                            ${homeTeam} vs ${awayTeam}
-                        </div>
-                        <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
-                            <button onclick="addToSlip('${m.id}', '${homeTeam} vs ${awayTeam}', '1 (${homeTeam})', ${odd1})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
-                                <div class="text-[10px] text-gray-500">1</div>
-                                <div class="font-bold text-betGreen">${odd1}</div>
-                            </button>
-                            <button onclick="addToSlip('${m.id}', '${homeTeam} vs ${awayTeam}', 'Draw (X)', ${oddX})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
-                                <div class="text-[10px] text-gray-500">X</div>
-                                <div class="font-bold text-betGreen">${oddX}</div>
-                            </button>
-                            <button onclick="addToSlip('${m.id}', '${homeTeam} vs ${awayTeam}', '2 (${awayTeam})', ${odd2})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
-                                <div class="text-[10px] text-gray-500">2</div>
-                                <div class="font-bold text-betGreen">${odd2}</div>
-                            </button>
-                        </div>
+            container.innerHTML = generatedMatches.map((m) => `
+                <div class="bg-white p-3 rounded-xl shadow-xs border border-gray-200 space-y-2">
+                    <div class="flex justify-between items-center text-[10px] text-gray-500 border-b pb-1">
+                        <span class="font-bold text-emerald-800">${m.competition}</span>
+                        <span>🕒 ${m.time}</span>
                     </div>
-                `;
-            }).join('');
+                    <div class="font-bold text-sm text-gray-900 py-1">
+                        ${m.home} vs ${m.away}
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', '1 (${m.home})', ${m.odds.home})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">1</div>
+                            <div class="font-bold text-betGreen">${m.odds.home}</div>
+                        </button>
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', 'Draw (X)', ${m.odds.draw})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">X</div>
+                            <div class="font-bold text-betGreen">${m.odds.draw}</div>
+                        </button>
+                        <button onclick="addToSlip('${m.id}', '${m.home} vs ${m.away}', '2 (${m.away})', ${m.odds.away})" class="bg-gray-50 hover:bg-emerald-50 p-2 rounded border transition">
+                            <div class="text-[10px] text-gray-500">2</div>
+                            <div class="font-bold text-betGreen">${m.odds.away}</div>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function addToSlip(matchId, matchName, market, odd) {
@@ -340,7 +336,7 @@
             closeVipModal();
         }
 
-        // Run on page load
+        // Initialize immediately on load
         window.addEventListener('DOMContentLoaded', () => {
             const picker = document.getElementById('fullYearDatePicker');
             if(picker) picker.value = selectedDateStr;
